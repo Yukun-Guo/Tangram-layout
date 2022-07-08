@@ -2,8 +2,9 @@
   "compilerOptions": {
     "target": "esnext",
     "useDefineForClassFields": true,
-    "module": "esnext",
+    "module": "commonjs",
     "moduleResolution": "node",
+    "strictNullChecks": false,
     "strict": true,
     "jsx": "preserve",
     "sourceMap": true,
@@ -14,5 +15,7 @@
     "skipLibCheck": true
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "references": [{
+    "path": "./tsconfig.node.json"
+  }]
 }
