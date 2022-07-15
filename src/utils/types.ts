@@ -7,11 +7,11 @@ interface TreeNode {
     proportion?: number
     parentID?: string
     twinID?: string
-    children?: string[] // type for a known property.
+    children?: string[] 
 }
 
 interface Stump {
-    [key: string]: TreeNode // type for a known property.
+    [key: string]: TreeNode 
 }
 
 
