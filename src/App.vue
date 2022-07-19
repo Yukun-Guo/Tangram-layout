@@ -37,7 +37,7 @@ let node4: TreeNode = {
 let node5: TreeNode = {
   ID: "5",
   isShow: false,
-  layout: "vertical",
+  layout: "horizontal",
   relativePosition: 1,
   twinID: node2.ID,
 };
@@ -55,6 +55,13 @@ let node7: TreeNode = {
   relativePosition: 0,
   twinID: node5.ID,
 };
+let node8: TreeNode = {
+  ID: "8",
+  isShow: false,
+  layout: "vertical",
+  relativePosition: 0,
+  twinID: node2.ID,
+};
 insertChild(layout_tree, node1);
 insertChild(layout_tree, node2);
 insertChild(layout_tree, node3);
@@ -62,6 +69,7 @@ insertChild(layout_tree, node4);
 insertChild(layout_tree, node5);
 insertChild(layout_tree, node6);
 insertChild(layout_tree, node7);
+insertChild(layout_tree, node8);
 </script>
 
 <template>
