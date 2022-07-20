@@ -2,6 +2,7 @@
 import { NO } from "@vue/shared";
 import { defineComponent, ref, reactive, h, VNode, computed } from "vue";
 import {
+  TreeNode,
   Stump,
   createTree,
   getTreeSize,
@@ -9,7 +10,10 @@ import {
   insertChild,
   moveChild,
 } from "../utils/tree";
-import { TreeNode } from "../utils/types";
+
+import Pane from "./Pane.vue";
+import Splitter from "./Splitter.vue";
+// import "./style.css";
 
 export default defineComponent({
   name: "TangramLayout",
@@ -22,54 +26,68 @@ export default defineComponent({
     let rLayout = reactive(props.layout);
 
     let splitProps = (node: TreeNode) => {
-      switch (node.layout) {
-        case "vertical":
-          return {
-            id: node.ID,
-            class: `split ${node.layout}`,
-            style: { width: `${node.proportion}%` },
-          };
-        default:
-          return {
-            id: node.ID,
-            class: `split ${node.layout}`,
-            style: { height: `${node.proportion}%` },
-          };
-      }
+      let cssClass = ["split", node.layout, node.resizable ? "resizable" : ""];
+      return {
+        id: node.ID,
+        class: cssClass,
+        style: { "flex-basis": `${node.proportion}%` },
+      };
     };
 
     let leafProps = (node: TreeNode) => {
-      switch (node.layout) {
-        case "vertical":
-          return {
-            id: node.ID,
-            class: "leaf",
-            style: { height: `${node.proportion}%` },
-          };
-        default:
-          return {
-            id: node.ID,
-            class: "leaf",
-            style: { width: `${node.proportion}%` },
-          };
-      }
+      return {
+        id: node.ID,
+        class: "leaf",
+        style: { "flex-basis": `${node.proportion}%` },
+      };
     };
 
+    // let startResize = (event: MouseEvent) => {
+    //   if (!this.resizable || event.button !== 0) return;
+    //   event.stopPropagation();
+    //   event.preventDefault();
+    //   this.state.resizing = true;
+
+    //   const drag = (event) => {
+    //     if (event.button !== 0) return;
+    //     const h = this.dir === "horizontal";
+    //     var splitter =
+    //       (h ? this.$el.children[1].clientWidth : this.$el.children[1].clientHeight) / 2;
+    //     var parentRect = this.$el.getBoundingClientRect();
+    //     var splitSize = h
+    //       ? ((event.x - parentRect.left - splitter) / this.$el.clientWidth) * 100
+    //       : ((event.y - parentRect.top - splitter) / this.$el.clientHeight) * 100;
+    //     this.state.split = splitSize + "%";
+    //     this.$emit("onSplitResize", event, this, this.state.split);
+    //   };
+    //   const drop = (event) => {
+    //     if (event.button !== 0) return;
+    //     this.state.resizing = false;
+    //     document.removeEventListener("mousemove", drag);
+    //     document.removeEventListener("mouseup", drop);
+    //   };
+    //   document.addEventListener("mousemove", drag);
+    //   document.addEventListener("mouseup", drop);
+    // };
+
     const walk = (Node: TreeNode): VNode => {
-      console.log(Node);
       let split: VNode;
       if (Node.children.length > 1) {
         // this is a branch node
         let subSplit: VNode[] = [];
         Node.children.forEach((child) => {
           subSplit.push(walk(rLayout[child]));
+          subSplit.push(h(Splitter, { resizable: Node.resizable, dir: Node.layout }));
         });
+        subSplit.pop();
         split = h("div", splitProps(Node), subSplit);
       } else {
         // this is a leaf node
-        split = h("div", leafProps(Node), `${Node.ID}`);
+        split = h("div", leafProps(Node), [
+          h("div", {}, "header"),
+          h(Pane, { title: Node.ID }, ["content"]),
+        ]);
       }
-
       return split;
     };
     context.expose({ rLayout });
@@ -95,6 +113,17 @@ export default defineComponent({
 }
 .leaf {
   background-color: chartreuse;
-  margin: 3%;
+  border: 1px;
+  border-style: dotted;
+  border-color: black;
+}
+.split.resizable.vertical > .splitter {
+  cursor: row-resize;
+  width: 10px;
+}
+
+.split.resizable.horizontal > .splitter {
+  cursor: col-resize;
+  height: 10px;
 }
 </style>

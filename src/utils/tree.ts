@@ -107,6 +107,7 @@ interface TreeNode {
     isShow: boolean
     isActive?: boolean
     layout: 'horizontal' | 'vertical'
+    resizable?: boolean
     relativePosition?: 0 | 1 // relative position of the twin node, used for adjust window position layout
     proportion?: number
     parentID?: string
