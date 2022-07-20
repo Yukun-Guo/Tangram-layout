@@ -97,7 +97,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.split {
+/* .split {
   display: flex;
   flex: 1;
   height: 100%;
@@ -110,14 +110,15 @@ export default defineComponent({
 
 .split.horizontal {
   flex-direction: row;
-}
+}*/
 .leaf {
   background-color: chartreuse;
   border: 1px;
   border-style: dotted;
   border-color: black;
 }
-.split.resizable.vertical > .splitter {
+
+/*.split.resizable.vertical > .splitter {
   cursor: row-resize;
   width: 10px;
 }
@@ -125,5 +126,5 @@ export default defineComponent({
 .split.resizable.horizontal > .splitter {
   cursor: col-resize;
   height: 10px;
-}
+} */
 </style>

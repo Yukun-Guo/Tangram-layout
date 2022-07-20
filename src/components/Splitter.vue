@@ -67,11 +67,11 @@ export default defineComponent({
 <style>
 .split {
   display: flex;
-  flex: 1;
+  /* flex: 2; */
   height: 100%;
 }
 
-.split > .content {
+/* .split > .content {
   position: relative;
   display: flex;
   box-sizing: border-box;
@@ -81,14 +81,14 @@ export default defineComponent({
 .split > .content > * {
   flex: 1;
   height: 100%;
-}
+} */
 
-.split > .content:last-child {
+/* .split > .content:last-child {
   flex: 1;
-}
+} */
 
-.split > .splitter {
-  flex-basis: 6px;
+.split.splitter {
+  flex-basis: 4px;
 }
 
 .split.vertical {
@@ -99,25 +99,26 @@ export default defineComponent({
   flex-direction: row;
 }
 
-.split.resizable.vertical > .splitter {
+.split.resizable.vertical.splitter {
   cursor: row-resize;
 }
 
-.split.resizable.horizontal > .splitter {
+.split.resizable.horizontal.splitter {
   cursor: col-resize;
+  height: auto;
 }
 
 /* Splitter styling */
-.split > .splitter {
-  flex-basis: 8px;
+.split.splitter {
+  flex-basis: 6px;
   position: relative;
   background: transparent;
   transition: all 0.3s;
 }
 
-.split.resizable > .splitter:hover,
-.split.resizable.resizing > .splitter {
-  background: rgba(100, 100, 100, 0.4);
-  transition: all 0.3s;
+.split.resizable.splitter:hover,
+.split.resizable.resizing.splitter {
+  background: rgb(0, 122, 201);
+  transition: all 0.1s;
 }
 </style>
