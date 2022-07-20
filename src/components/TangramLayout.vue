@@ -90,7 +90,7 @@ export default defineComponent({
       }
       return split;
     };
-    context.expose({ rLayout });
+    //    context.expose({ rLayout });
     return () => walk(rLayout.treeRoot);
   },
 });

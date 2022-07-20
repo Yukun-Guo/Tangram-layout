@@ -80,9 +80,7 @@ insertChild(layout_tree, node7);
 insertChild(layout_tree, node8);
 </script>
 
-<template>
-  <TangramLayout :layout="layout_tree" />
-</template>
+<template><TangramLayout :layout="layout_tree" /></template>
 
 <style>
 #app {
@@ -92,5 +90,11 @@ insertChild(layout_tree, node8);
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+
+  user-select: none; /* standard syntax */
+  -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+  -moz-user-select: none; /* mozilla browsers */
+  -khtml-user-select: none; /* webkit (konqueror) browsers */
+  -ms-user-select: none; /* IE10+ */
 }
 </style>
