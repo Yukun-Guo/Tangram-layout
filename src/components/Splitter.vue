@@ -17,6 +17,8 @@ export default defineComponent({
       split: props.splitPortion || "50%",
     };
 
+    const el = ref(null);
+
     let splitClass = computed(() => [
       "split",
       "splitter",
@@ -37,7 +39,7 @@ export default defineComponent({
         console.log("drag");
         const h = props.dir === "horizontal";
         console.log([event.x, event.y]);
-        console.log(event.target.getBoundingClientRect());
+        console.log(el.value.getBoundingClientRect());
 
         // var splitter =
         //   (h ? content.$el.children[1].clientWidth : this.$el.children[1].clientHeight) /
@@ -62,6 +64,7 @@ export default defineComponent({
     };
     return {
       state,
+      el,
       props,
       startResize,
       splitClass,
