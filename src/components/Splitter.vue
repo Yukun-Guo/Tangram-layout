@@ -6,11 +6,14 @@
 import { defineComponent, ref, reactive, h, VNode, computed, onMounted } from "vue";
 export default defineComponent({
   props: {
+    onSplitResize: { type: Function },
+    leftChildId: { type: String, default: null },
+    rightChildId: { type: String, default: null },
     resizable: { type: Boolean, default: true },
     dir: { type: String, default: "horizontal" },
     splitPortion: { type: String, default: "50%" },
   },
-
+  emits: ["splitResize"],
   setup(props, context) {
     let state = {
       resizing: false,
@@ -40,7 +43,8 @@ export default defineComponent({
         const h = props.dir === "horizontal";
         console.log([event.x, event.y]);
         console.log(el.value.getBoundingClientRect());
-
+        context.emit("splitResize", event);
+        // props.onSplitResize("he");
         // var splitter =
         //   (h ? content.$el.children[1].clientWidth : this.$el.children[1].clientHeight) /
         //   2;

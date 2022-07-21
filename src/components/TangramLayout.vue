@@ -22,6 +22,7 @@ export default defineComponent({
       default: createTree(),
     },
   },
+
   setup(props, context) {
     let rLayout = reactive(props.layout);
 
@@ -75,10 +76,21 @@ export default defineComponent({
       if (Node.children.length > 1) {
         // this is a branch node
         let subSplit: VNode[] = [];
-        Node.children.forEach((child) => {
-          subSplit.push(walk(rLayout[child]));
-          subSplit.push(h(Splitter, { resizable: Node.resizable, dir: Node.layout }));
-        });
+
+        for (let i = 0; i < Node.children.length; i++) {
+          const child1 = Node.children[i];
+          const child2 = Node.children[i + 1];
+          subSplit.push(walk(rLayout[child1]));
+          subSplit.push(
+            h(Splitter, {
+              onSplitResize,
+              leftChildId: child1,
+              rightChildId: child2,
+              resizable: Node.resizable,
+              dir: Node.layout,
+            })
+          );
+        }
         subSplit.pop();
         split = h("div", splitProps(Node), subSplit);
       } else {
@@ -90,6 +102,11 @@ export default defineComponent({
       }
       return split;
     };
+
+    const onSplitResize = (part: MouseEvent) => {
+      console.log("@@@@@ event " + part.x + "  " + part.y);
+    };
+
     //    context.expose({ rLayout });
     return () => walk(rLayout.treeRoot);
   },
