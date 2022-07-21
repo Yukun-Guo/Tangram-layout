@@ -21,7 +21,7 @@ interface Stump {
 const createTree = (tree: Stump = undefined) => {
     if (tree === undefined) {
         tree = {}
-        tree['treeRoot'] = { ID: 'treeRoot', isShow: true, layout: 'horizontal', proportion: 100, parentID: undefined, twinID: undefined, children: [] }
+        tree['treeRoot'] = { ID: 'treeRoot', isShow: true, layout: 'vertical', proportion: 100, parentID: undefined, twinID: undefined, children: [] }
     }
     return tree
 }
@@ -58,14 +58,17 @@ const insertChild = (tree: Stump, newNode: TreeNode) => {
             // if the newNode layout is different with the twin layout, create a new parent node for them
             let newParentID = uuid()
             newNode.parentID = newParentID
+            newNode.proportion = 50
             let children = newNode.relativePosition ? [newNode.twinID, newNode.ID] : [newNode.ID, newNode.twinID]
             tree[newNode.twinID].parentID = newParentID
+            tree[newNode.twinID].proportion = 50
             tree[newParentID] = { ID: newParentID, isShow: true, layout: newNode.layout, parentID: parentID, twinID: undefined, children: children }
             let insertIdx = tree[parentID].children.indexOf(newNode.twinID)
             tree[parentID].children[insertIdx] = newParentID
         }
-        // update the proportion
+        // add newNode to tree
         tree[newNode.ID] = newNode
+        // update the proportion
         let prop = 100 / tree[parentID].children.length
         tree[parentID].children.forEach((el) => { tree[el].proportion = prop })
     }

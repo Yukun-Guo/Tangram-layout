@@ -15,10 +15,10 @@ export default defineComponent({
   },
   emits: ["splitResize"],
   setup(props, context) {
-    let state = {
+    let state = reactive({
       resizing: false,
       split: props.splitPortion || "50%",
-    };
+    });
 
     const el = ref(null);
 
@@ -43,17 +43,35 @@ export default defineComponent({
         const h = props.dir === "horizontal";
         console.log([event.x, event.y]);
         console.log(el.value.getBoundingClientRect());
-        context.emit("splitResize", event);
-        // props.onSplitResize("he");
-        // var splitter =
-        //   (h ? content.$el.children[1].clientWidth : this.$el.children[1].clientHeight) /
-        //   2;
-        // var parentRect = this.$el.getBoundingClientRect();
-        // var splitSize = h
-        //   ? ((event.x - parentRect.left - splitter) / this.$el.clientWidth) * 100
-        //   : ((event.y - parentRect.top - splitter) / this.$el.clientHeight) * 100;
-        // state.split = splitSize + "%";
-        // content.emit("onSplitResize", event, this, state.split);
+        console.log(el.value.parentElement.getBoundingClientRect());
+        // calculate resized proportion
+        var elRect = el.value.getBoundingClientRect();
+        var parentRect = el.value.parentElement.getBoundingClientRect();
+        var leftChildRect;
+        var rightChildRect;
+        el.value.parentElement.childNodes.forEach((element) => {
+          if (element.id === props.leftChildId) {
+            leftChildRect = element.getBoundingClientRect();
+          } else if (element.id === props.rightChildId) {
+            rightChildRect = element.getBoundingClientRect();
+          }
+        });
+
+        var splitter = h ? elRect.width : elRect.height;
+
+        var leftChildProportion = h
+          ? (event.x - leftChildRect.left) / (leftChildRect.width + rightChildRect.width)
+          : (event.y - leftChildRect.top) /
+            (leftChildRect.height + rightChildRect.height);
+
+        leftChildProportion = Math.min(Math.max(0.01, leftChildProportion), 0.99);
+        console.log(leftChildProportion);
+
+        context.emit("splitResize", {
+          p: leftChildProportion,
+          childID1: props.leftChildId,
+          childID2: props.rightChildId,
+        });
       };
 
       const drop = (event: MouseEvent) => {
@@ -95,21 +113,16 @@ export default defineComponent({
 <style>
 .split {
   display: flex;
-  /* flex: 2; */
+  /* flex: 1; */
   /* height: 100%; */
 }
 
-/* .split > .content {
+.split > .content {
   position: relative;
   display: flex;
   box-sizing: border-box;
   overflow: hidden;
 }
-
-.split > .content > * {
-  flex: 1;
-  height: 100%;
-} */
 
 /* .split > .content:last-child {
   flex: 1;
@@ -133,7 +146,6 @@ export default defineComponent({
 
 .split.resizable.horizontal.splitter {
   cursor: col-resize;
-  height: auto;
 }
 
 /* Splitter styling */
@@ -148,5 +160,16 @@ export default defineComponent({
 .split.resizable.resizing.splitter {
   background: rgb(0, 122, 201);
   transition: all 0.1s;
+}
+
+.split.resizable.splitter::after {
+  position: absolute;
+  content: " ";
+  z-index: 10;
+  transition: all 0.3s;
+  top: -8px;
+  right: -8px;
+  bottom: -8px;
+  left: -8px;
 }
 </style>

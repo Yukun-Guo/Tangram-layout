@@ -21,6 +21,9 @@ export default defineComponent({
     layout: {
       default: createTree(),
     },
+    minSize: {
+      default: 10,
+    },
   },
 
   setup(props, context) {
@@ -97,14 +100,25 @@ export default defineComponent({
         // this is a leaf node
         split = h("div", leafProps(Node), [
           h("div", {}, "header"),
-          h(Pane, { title: Node.ID }, ["content"]),
+          h(Pane, { title: Node.ID }, () => {
+            return "content contentcontentcontentcontentcontentcontentcontentcontentcontent";
+          }),
         ]);
       }
       return split;
     };
 
-    const onSplitResize = (part: MouseEvent) => {
-      console.log("@@@@@ event " + part.x + "  " + part.y);
+    const onSplitResize = (splitInfo: Object) => {
+      var totalP =
+        rLayout[splitInfo.childID1].proportion + rLayout[splitInfo.childID2].proportion;
+      var leftP = Math.min(
+        Math.max(totalP * splitInfo.p, props.minSize),
+        totalP - props.minSize
+      );
+      console.log(leftP);
+
+      rLayout[splitInfo.childID1].proportion = leftP;
+      rLayout[splitInfo.childID2].proportion = totalP - leftP;
     };
 
     //    context.expose({ rLayout });
@@ -114,6 +128,14 @@ export default defineComponent({
 </script>
 
 <style scoped>
+#treeRoot {
+  /* display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+  overflow: hidden;
+  position: relative; */
+  height: 100%;
+}
 /* .split {
   display: flex;
   flex: 1;
@@ -133,6 +155,7 @@ export default defineComponent({
   border: 1px;
   border-style: dotted;
   border-color: black;
+  overflow: hidden;
 }
 
 /*.split.resizable.vertical > .splitter {

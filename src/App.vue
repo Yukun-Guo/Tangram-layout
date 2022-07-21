@@ -2,7 +2,7 @@
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import TangramLayout from "./components/TangramLayout.vue";
-import { createTree, TreeNode, insertChild } from "./utils/tree";
+import { createTree, TreeNode, insertChild, removeChild } from "./utils/tree";
 
 let layout_tree = createTree();
 
@@ -17,7 +17,7 @@ let node1: TreeNode = {
 let node2: TreeNode = {
   ID: "2",
   isShow: false,
-  layout: "vertical",
+  layout: "horizontal",
   resizable: true,
   relativePosition: 1,
   twinID: node1.ID,
@@ -25,10 +25,10 @@ let node2: TreeNode = {
 let node3: TreeNode = {
   ID: "3",
   isShow: false,
-  layout: "horizontal",
+  layout: "vertical",
   resizable: true,
   relativePosition: 0,
-  twinID: node1.ID,
+  twinID: node2.ID,
 };
 let node4: TreeNode = {
   ID: "4",
@@ -70,6 +70,14 @@ let node8: TreeNode = {
   relativePosition: 0,
   twinID: node2.ID,
 };
+let node9: TreeNode = {
+  ID: "9",
+  isShow: false,
+  layout: "vertical",
+  resizable: true,
+  relativePosition: 0,
+  twinID: node7.ID,
+};
 insertChild(layout_tree, node1);
 insertChild(layout_tree, node2);
 insertChild(layout_tree, node3);
@@ -78,6 +86,8 @@ insertChild(layout_tree, node5);
 insertChild(layout_tree, node6);
 insertChild(layout_tree, node7);
 insertChild(layout_tree, node8);
+insertChild(layout_tree, node9);
+// removeChild(layout_tree, "4");
 </script>
 
 <template><TangramLayout :layout="layout_tree" /></template>
@@ -90,11 +100,15 @@ insertChild(layout_tree, node8);
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
-
+  height: 100%;
   user-select: none; /* standard syntax */
   -webkit-user-select: none; /* webkit (safari, chrome) browsers */
   -moz-user-select: none; /* mozilla browsers */
   -khtml-user-select: none; /* webkit (konqueror) browsers */
   -ms-user-select: none; /* IE10+ */
+}
+body {
+  min-height: 80vh;
+  height: 80vh;
 }
 </style>
