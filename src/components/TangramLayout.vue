@@ -108,13 +108,20 @@ export default defineComponent({
       return split;
     };
 
-    const onSplitResize = (splitInfo: Object) => {
+    const onSplitResize = (splitInfo: {
+      p: number;
+      childID1: string;
+      childID2: string;
+    }) => {
       var totalP =
         rLayout[splitInfo.childID1].proportion + rLayout[splitInfo.childID2].proportion;
+
       var leftP = Math.min(
         Math.max(totalP * splitInfo.p, props.minSize),
         totalP - props.minSize
       );
+      console.log("totalP " + totalP);
+
       console.log(leftP);
 
       rLayout[splitInfo.childID1].proportion = leftP;
@@ -136,6 +143,7 @@ export default defineComponent({
   position: relative; */
   height: 100%;
 }
+
 /* .split {
   display: flex;
   flex: 1;

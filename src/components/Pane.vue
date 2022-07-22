@@ -28,7 +28,7 @@ export default {
 }
 
 .pane > .header {
-  height: 40px;
+  height: 20px;
   padding: 10px;
   background-color: aqua;
   -webkit-touch-callout: none;
@@ -41,7 +41,7 @@ export default {
 
 .pane > .content {
   position: absolute;
-  top: 40px;
+  top: 20px;
   right: 0;
   bottom: 0;
   left: 0;

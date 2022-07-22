@@ -6,7 +6,6 @@
 import { defineComponent, ref, reactive, h, VNode, computed, onMounted } from "vue";
 export default defineComponent({
   props: {
-    onSplitResize: { type: Function },
     leftChildId: { type: String, default: null },
     rightChildId: { type: String, default: null },
     resizable: { type: Boolean, default: true },
@@ -17,7 +16,7 @@ export default defineComponent({
   setup(props, context) {
     let state = reactive({
       resizing: false,
-      split: props.splitPortion || "50%",
+      // split: props.splitPortion || "50%",
     });
 
     const el = ref(null);
@@ -39,33 +38,29 @@ export default defineComponent({
 
       const drag = (event: MouseEvent) => {
         if (event.button !== 0) return;
-        console.log("drag");
+        // console.log("drag");
         const h = props.dir === "horizontal";
-        console.log([event.x, event.y]);
-        console.log(el.value.getBoundingClientRect());
-        console.log(el.value.parentElement.getBoundingClientRect());
+        // console.log([event.x, event.y]);
+        // console.log(el.value.getBoundingClientRect());
+        // console.log(el.value.parentElement.getBoundingClientRect());
         // calculate resized proportion
         var elRect = el.value.getBoundingClientRect();
-        var parentRect = el.value.parentElement.getBoundingClientRect();
-        var leftChildRect;
-        var rightChildRect;
-        el.value.parentElement.childNodes.forEach((element) => {
+        var leftChildRect = { left: 0, top: 0, width: 100, height: 100 };
+        var rightChildRect = { width: 100, height: 100 };
+        el.value.parentElement.childNodes.forEach((element: any) => {
           if (element.id === props.leftChildId) {
             leftChildRect = element.getBoundingClientRect();
           } else if (element.id === props.rightChildId) {
             rightChildRect = element.getBoundingClientRect();
           }
         });
-
-        var splitter = h ? elRect.width : elRect.height;
-
         var leftChildProportion = h
           ? (event.x - leftChildRect.left) / (leftChildRect.width + rightChildRect.width)
           : (event.y - leftChildRect.top) /
             (leftChildRect.height + rightChildRect.height);
 
         leftChildProportion = Math.min(Math.max(0.01, leftChildProportion), 0.99);
-        console.log(leftChildProportion);
+        console.log("leftp " + leftChildProportion);
 
         context.emit("splitResize", {
           p: leftChildProportion,
