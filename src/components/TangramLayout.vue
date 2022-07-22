@@ -1,5 +1,4 @@
 <script lang="ts">
-import { NO } from "@vue/shared";
 import { defineComponent, ref, reactive, h, VNode, computed } from "vue";
 import {
   TreeNode,
@@ -22,7 +21,7 @@ export default defineComponent({
       default: createTree(),
     },
     minSize: {
-      default: 10,
+      default: 0,
     },
   },
 
@@ -41,38 +40,14 @@ export default defineComponent({
     let leafProps = (node: TreeNode) => {
       return {
         id: node.ID,
-        class: "leaf",
+        class: "leaf view",
+        targetView: "view-" + node.ID,
         style: { "flex-basis": `${node.proportion}%` },
+        mousedown: onViewDragStart,
       };
     };
-
-    // let startResize = (event: MouseEvent) => {
-    //   if (!this.resizable || event.button !== 0) return;
-    //   event.stopPropagation();
-    //   event.preventDefault();
-    //   this.state.resizing = true;
-
-    //   const drag = (event) => {
-    //     if (event.button !== 0) return;
-    //     const h = this.dir === "horizontal";
-    //     var splitter =
-    //       (h ? this.$el.children[1].clientWidth : this.$el.children[1].clientHeight) / 2;
-    //     var parentRect = this.$el.getBoundingClientRect();
-    //     var splitSize = h
-    //       ? ((event.x - parentRect.left - splitter) / this.$el.clientWidth) * 100
-    //       : ((event.y - parentRect.top - splitter) / this.$el.clientHeight) * 100;
-    //     this.state.split = splitSize + "%";
-    //     this.$emit("onSplitResize", event, this, this.state.split);
-    //   };
-    //   const drop = (event) => {
-    //     if (event.button !== 0) return;
-    //     this.state.resizing = false;
-    //     document.removeEventListener("mousemove", drag);
-    //     document.removeEventListener("mouseup", drop);
-    //   };
-    //   document.addEventListener("mousemove", drag);
-    //   document.addEventListener("mouseup", drop);
-    // };
+    // TODO:
+    let onViewDragStart = (event: MouseEvent) => {};
 
     const walk = (Node: TreeNode): VNode => {
       let split: VNode;
@@ -83,12 +58,15 @@ export default defineComponent({
         for (let i = 0; i < Node.children.length; i++) {
           const child1 = Node.children[i];
           const child2 = Node.children[i + 1];
+
           subSplit.push(walk(rLayout[child1]));
           subSplit.push(
             h(Splitter, {
               onSplitResize,
               leftChildId: child1,
               rightChildId: child2,
+              leftChildMinSize: rLayout[child1].minSize,
+              rightChildMinSize: child2 === undefined ? 1 : rLayout[child2].minSize,
               resizable: Node.resizable,
               dir: Node.layout,
             })
@@ -97,11 +75,10 @@ export default defineComponent({
         subSplit.pop();
         split = h("div", splitProps(Node), subSplit);
       } else {
-        // this is a leaf node
+        // create a new leaf node
         split = h("div", leafProps(Node), [
-          h("div", {}, "header"),
-          h(Pane, { title: Node.ID }, () => {
-            return "content contentcontentcontentcontentcontentcontentcontentcontentcontent";
+          h(Pane, { title: Node.name }, () => {
+            return "contentcontentcontentcontentcontentcontentcontentcontentcontentcontent";
           }),
         ]);
       }
@@ -120,16 +97,34 @@ export default defineComponent({
         Math.max(totalP * splitInfo.p, props.minSize),
         totalP - props.minSize
       );
-      console.log("totalP " + totalP);
+      // console.log("totalP " + totalP);
 
-      console.log(leftP);
+      // console.log(leftP);
 
       rLayout[splitInfo.childID1].proportion = leftP;
       rLayout[splitInfo.childID2].proportion = totalP - leftP;
     };
 
     //    context.expose({ rLayout });
-    return () => walk(rLayout.treeRoot);
+    return () =>
+      h("div", { style: { height: "100%" } }, [
+        h(
+          "button",
+          {
+            onClick: () => {
+              moveChild(rLayout, {
+                ID: "4",
+                isShow: true,
+                layout: "horizontal",
+                relativePosition: 1,
+                twinID: "3",
+              });
+            },
+          },
+          ["addnode"]
+        ),
+        walk(rLayout.treeRoot),
+      ]);
   },
 });
 </script>
@@ -163,7 +158,7 @@ export default defineComponent({
   border: 1px;
   border-style: dotted;
   border-color: black;
-  overflow: hidden;
+  overflow: overlay;
 }
 
 /*.split.resizable.vertical > .splitter {

@@ -3,7 +3,9 @@ import { uuid } from "./short-uuid"
 
 interface TreeNode {
     ID?: string
-    isShow: boolean
+    name?: string
+    isVisible: boolean
+    displayGroup?: number
     isActive?: boolean
     layout: 'horizontal' | 'vertical'
     resizable?: boolean
@@ -12,6 +14,7 @@ interface TreeNode {
     parentID?: string
     twinID?: string
     children?: string[]
+    minSize?: number
 }
 
 interface Stump {
@@ -21,7 +24,7 @@ interface Stump {
 const createTree = (tree: Stump = undefined) => {
     if (tree === undefined) {
         tree = {}
-        tree['treeRoot'] = { ID: 'treeRoot', isShow: true, layout: 'vertical', proportion: 100, parentID: undefined, twinID: undefined, children: [] }
+        tree['treeRoot'] = { ID: 'treeRoot', isVisible: true, layout: 'vertical', proportion: 100, parentID: undefined, twinID: undefined, children: [] }
     }
     return tree
 }
@@ -37,7 +40,7 @@ const insertChild = (tree: Stump, newNode: TreeNode) => {
     }
     // if current tree is empty, create a root node and push the new node to the tree
     if (getTreeSize(tree) === 0) {
-        tree['treeRoot'] = { ID: 'treeRoot', isShow: true, layout: 'horizontal', proportion: 100, parentID: undefined, twinID: undefined, children: [] }
+        tree['treeRoot'] = { ID: 'treeRoot', isVisible: true, layout: 'horizontal', proportion: 100, parentID: undefined, twinID: undefined, children: [] }
     }
     if (newNode.twinID === undefined) {
         newNode.parentID = 'treeRoot'
@@ -62,7 +65,7 @@ const insertChild = (tree: Stump, newNode: TreeNode) => {
             let children = newNode.relativePosition ? [newNode.twinID, newNode.ID] : [newNode.ID, newNode.twinID]
             tree[newNode.twinID].parentID = newParentID
             tree[newNode.twinID].proportion = 50
-            tree[newParentID] = { ID: newParentID, isShow: true, layout: newNode.layout, parentID: parentID, twinID: undefined, children: children }
+            tree[newParentID] = { ID: newParentID, isVisible: true, layout: newNode.layout, parentID: parentID, twinID: undefined, children: children }
             let insertIdx = tree[parentID].children.indexOf(newNode.twinID)
             tree[parentID].children[insertIdx] = newParentID
         }

@@ -8,6 +8,8 @@ export default defineComponent({
   props: {
     leftChildId: { type: String, default: null },
     rightChildId: { type: String, default: null },
+    leftChildMinSize: { type: Number, default: 1 },
+    rightChildMinSize: { type: Number, default: 1 },
     resizable: { type: Boolean, default: true },
     dir: { type: String, default: "horizontal" },
     splitPortion: { type: String, default: "50%" },
@@ -31,7 +33,7 @@ export default defineComponent({
 
     let startResize = (event: MouseEvent) => {
       if (!props.resizable || event.button !== 0) return;
-      console.log("startResize");
+      // console.log("startResize");
       event.stopPropagation();
       event.preventDefault();
       state.resizing = true;
@@ -54,13 +56,59 @@ export default defineComponent({
             rightChildRect = element.getBoundingClientRect();
           }
         });
+
+        // if (h) {
+        //   var leftChildW =
+        //     Math.min(
+        //       Math.max(event.x - leftChildRect.left, leftChildMinSize[1]),
+        //       rightChildRect.right - rightChildMinSize[1]
+        //     ) /
+        //     (leftChildRect.width + rightChildRect.width);
+        // } else {
+        //   var leftChildH =
+        //     Math.min(
+        //       Math.max(event.y - leftChildRect.top, leftChildMinSize[2]),
+        //       rightChildRect.bottom - rightChildMinSize[2]
+        //     ) /
+        //     (leftChildRect.height + rightChildRect.height);
+        // }
+
         var leftChildProportion = h
-          ? (event.x - leftChildRect.left) / (leftChildRect.width + rightChildRect.width)
-          : (event.y - leftChildRect.top) /
+          ? Math.min(
+              Math.max(event.x - leftChildRect.left, props.leftChildMinSize),
+              rightChildRect.right - leftChildRect.left - props.rightChildMinSize
+            ) /
+            (leftChildRect.width + rightChildRect.width)
+          : Math.min(
+              Math.max(event.y - leftChildRect.top, props.leftChildMinSize),
+              rightChildRect.bottom - leftChildRect.top - props.rightChildMinSize
+            ) /
             (leftChildRect.height + rightChildRect.height);
 
-        leftChildProportion = Math.min(Math.max(0.01, leftChildProportion), 0.99);
-        console.log("leftp " + leftChildProportion);
+        // console.log("right rect", rightChildRect);
+
+        // console.log("x-left", event.x - leftChildRect.left);
+        // console.log("right min size", props.rightChildMinSize);
+        // console.log("right.right", rightChildRect.right);
+
+        // console.log("max left", rightChildRect.right - props.rightChildMinSize);
+        // console.log(
+        //   "left size",
+        //   Math.min(
+        //     Math.max(event.x - leftChildRect.left, props.leftChildMinSize),
+        //     rightChildRect.right - props.rightChildMinSize
+        //   )
+        // );
+
+        // console.log(event.x);
+
+        // var leftChildProportion = h
+        //   ? (event.x - leftChildRect.left) / (leftChildRect.width + rightChildRect.width)
+        //   : (event.y - leftChildRect.top) /
+        //     (leftChildRect.height + rightChildRect.height);
+
+        leftChildProportion = Math.min(Math.max(0.0, leftChildProportion), 1.0);
+        // console.log("leftp " + leftChildProportion);
 
         context.emit("splitResize", {
           p: leftChildProportion,
@@ -71,7 +119,7 @@ export default defineComponent({
 
       const drop = (event: MouseEvent) => {
         if (event.button !== 0) return;
-        console.log("drop");
+        // console.log("drop");
         state.resizing = false;
         document.removeEventListener("mousemove", drag);
         document.removeEventListener("mouseup", drop);
@@ -108,8 +156,8 @@ export default defineComponent({
 <style>
 .split {
   display: flex;
-  /* flex: 1; */
-  /* height: 100%; */
+  flex: 1;
+  height: 100%;
 }
 
 .split > .content {
@@ -129,10 +177,12 @@ export default defineComponent({
 
 .split.vertical {
   flex-direction: column;
+  overflow: hidden;
 }
 
 .split.horizontal {
   flex-direction: row;
+  overflow: hidden;
 }
 
 .split.resizable.vertical.splitter {
@@ -157,7 +207,7 @@ export default defineComponent({
   transition: all 0.1s;
 }
 
-.split.resizable.splitter::after {
+.split.resizable > .splitter::after {
   position: absolute;
   content: " ";
   z-index: 10;

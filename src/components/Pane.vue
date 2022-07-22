@@ -29,8 +29,9 @@ export default {
 
 .pane > .header {
   height: 20px;
-  padding: 10px;
-  background-color: aqua;
+  padding: 2px;
+  color: white;
+  background-color: #35363a;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;

@@ -8,75 +8,93 @@ let layout_tree = createTree();
 
 let node1: TreeNode = {
   ID: "1",
-  isShow: false,
+  name: "Pane 1",
+  isVisible: true,
   layout: "horizontal",
   resizable: true,
   relativePosition: 1,
   twinID: undefined,
+  minSize: 20,
 };
 let node2: TreeNode = {
   ID: "2",
-  isShow: false,
+  name: "Pane 2",
+  isVisible: true,
   layout: "horizontal",
   resizable: true,
   relativePosition: 1,
   twinID: node1.ID,
+  minSize: 20,
 };
 let node3: TreeNode = {
   ID: "3",
-  isShow: false,
+  name: "Pane 3",
+  isVisible: true,
   layout: "vertical",
   resizable: true,
   relativePosition: 0,
   twinID: node2.ID,
+  minSize: 50,
 };
 let node4: TreeNode = {
   ID: "4",
-  isShow: false,
+  name: "Pane 4",
+  isVisible: true,
   layout: "vertical",
   resizable: true,
   relativePosition: 0,
   twinID: node2.ID,
+  minSize: 20,
 };
 let node5: TreeNode = {
   ID: "5",
-  isShow: false,
+  name: "Pane 5",
+  isVisible: true,
   layout: "horizontal",
   resizable: true,
   relativePosition: 1,
   twinID: node2.ID,
+  minSize: 20,
 };
 let node6: TreeNode = {
   ID: "6",
-  isShow: false,
+  name: "Pane 6",
+  isVisible: false,
   layout: "horizontal",
   resizable: true,
   relativePosition: 0,
   twinID: node3.ID,
+  minSize: 40,
 };
 let node7: TreeNode = {
   ID: "7",
-  isShow: false,
+  name: "Pane 7",
+  isVisible: true,
   layout: "horizontal",
   resizable: true,
   relativePosition: 0,
   twinID: node5.ID,
+  minSize: 20,
 };
 let node8: TreeNode = {
   ID: "8",
-  isShow: false,
+  name: "Pane 8",
+  isVisible: true,
   layout: "vertical",
   resizable: true,
   relativePosition: 0,
   twinID: node2.ID,
+  minSize: 20,
 };
 let node9: TreeNode = {
   ID: "9",
-  isShow: false,
+  name: "Pane 9",
+  isVisible: true,
   layout: "vertical",
   resizable: true,
   relativePosition: 0,
   twinID: node7.ID,
+  minSize: 20,
 };
 insertChild(layout_tree, node1);
 insertChild(layout_tree, node2);
@@ -90,7 +108,9 @@ insertChild(layout_tree, node9);
 // removeChild(layout_tree, "4");
 </script>
 
-<template><TangramLayout :layout="layout_tree" /></template>
+<template>
+  <TangramLayout :layout="layout_tree" />
+</template>
 
 <style>
 #app {
