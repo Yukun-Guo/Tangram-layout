@@ -3,98 +3,98 @@
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import TangramLayout from "./components/TangramLayout.vue";
 import { createTree, TreeNode, insertChild, removeChild } from "./utils/tree";
-
+import Hello from "./components/HelloWorld.vue";
 let layout_tree = createTree();
 
 let node1: TreeNode = {
   ID: "1",
   name: "Pane 1",
-  isVisible: true,
   layout: "horizontal",
   resizable: true,
   relativePosition: 1,
   twinID: undefined,
   minSize: 20,
+  vNode: Hello,
 };
 let node2: TreeNode = {
   ID: "2",
   name: "Pane 2",
-  isVisible: true,
   layout: "horizontal",
   resizable: true,
   relativePosition: 1,
   twinID: node1.ID,
   minSize: 20,
+  vNode: Hello,
 };
 let node3: TreeNode = {
   ID: "3",
   name: "Pane 3",
-  isVisible: true,
   layout: "vertical",
   resizable: true,
   relativePosition: 0,
   twinID: node2.ID,
   minSize: 50,
+  vNode: Hello,
 };
 let node4: TreeNode = {
   ID: "4",
   name: "Pane 4",
-  isVisible: true,
   layout: "vertical",
   resizable: true,
   relativePosition: 0,
   twinID: node2.ID,
   minSize: 20,
+  vNode: Hello,
 };
 let node5: TreeNode = {
   ID: "5",
   name: "Pane 5",
-  isVisible: true,
   layout: "horizontal",
   resizable: true,
   relativePosition: 1,
   twinID: node2.ID,
   minSize: 20,
+  vNode: Hello,
 };
 let node6: TreeNode = {
   ID: "6",
   name: "Pane 6",
-  isVisible: false,
   layout: "horizontal",
   resizable: true,
   relativePosition: 0,
   twinID: node3.ID,
   minSize: 40,
+  vNode: Hello,
 };
 let node7: TreeNode = {
   ID: "7",
   name: "Pane 7",
-  isVisible: true,
   layout: "horizontal",
   resizable: true,
   relativePosition: 0,
   twinID: node5.ID,
   minSize: 20,
+  vNode: Hello,
 };
 let node8: TreeNode = {
   ID: "8",
   name: "Pane 8",
-  isVisible: true,
   layout: "vertical",
   resizable: true,
   relativePosition: 0,
   twinID: node2.ID,
   minSize: 20,
+  vNode: Hello,
 };
 let node9: TreeNode = {
   ID: "9",
   name: "Pane 9",
-  isVisible: true,
   layout: "vertical",
   resizable: true,
   relativePosition: 0,
   twinID: node7.ID,
   minSize: 20,
+  vNode: Hello,
 };
 insertChild(layout_tree, node1);
 insertChild(layout_tree, node2);

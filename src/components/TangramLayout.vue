@@ -12,6 +12,7 @@ import {
 
 import Pane from "./Pane.vue";
 import Splitter from "./Splitter.vue";
+
 // import "./style.css";
 
 export default defineComponent({
@@ -40,21 +41,47 @@ export default defineComponent({
     let leafProps = (node: TreeNode) => {
       return {
         id: node.ID,
+        nodeId: node.ID,
         class: "leaf view",
         targetView: "view-" + node.ID,
         style: { "flex-basis": `${node.proportion}%` },
-        mousedown: onViewDragStart,
+        onmousedown: onViewDragStart,
       };
     };
     // TODO:
-    let onViewDragStart = (event: MouseEvent) => {};
+    let onViewDragStart = (event: MouseEvent) => {
+      if (event.button !== 0) return;
+      const nodeIdAttr = event.target.hasAttribute("nodeId");
+      const dragAttr = event.target.hasAttribute("pane-drag");
+      if (!nodeIdAttr && !dragAttr) return;
+
+      var el = event.target;
+      const nodeId = el.getAttribute("nodeId");
+      console.log(nodeId);
+
+      document.addEventListener("mousemove", onViewDrag);
+      document.addEventListener("mouseup", onViewDrop);
+    };
+
+    let onViewDrag = (event: MouseEvent) => {
+      if (event.button !== 0) return;
+      event.preventDefault();
+      event.stopPropagation();
+      // drag.over = null; // reset over
+      console.log("dragging");
+    };
+
+    let onViewDrop = (event: MouseEvent) => {
+      if (event.button !== 0) return;
+      document.removeEventListener("mousemove", onViewDrag);
+      document.removeEventListener("mouseup", onViewDrop);
+    };
 
     const walk = (Node: TreeNode): VNode => {
       let split: VNode;
       if (Node.children.length > 1) {
         // this is a branch node
         let subSplit: VNode[] = [];
-
         for (let i = 0; i < Node.children.length; i++) {
           const child1 = Node.children[i];
           const child2 = Node.children[i + 1];
@@ -77,9 +104,7 @@ export default defineComponent({
       } else {
         // create a new leaf node
         split = h("div", leafProps(Node), [
-          h(Pane, { title: Node.name }, () => {
-            return "contentcontentcontentcontentcontentcontentcontentcontentcontentcontent";
-          }),
+          h(Pane, { title: Node.name }, [h(Node.vNode, {}, [])]),
         ]);
       }
       return split;
@@ -114,6 +139,7 @@ export default defineComponent({
             onClick: () => {
               moveChild(rLayout, {
                 ID: "4",
+                name: "New Panel 4",
                 isShow: true,
                 layout: "horizontal",
                 relativePosition: 1,
@@ -139,20 +165,6 @@ export default defineComponent({
   height: 100%;
 }
 
-/* .split {
-  display: flex;
-  flex: 1;
-  height: 100%;
-
-  background-color: aqua;
-}
-.split.vertical {
-  flex-direction: column;
-}
-
-.split.horizontal {
-  flex-direction: row;
-}*/
 .leaf {
   background-color: chartreuse;
   border: 1px;
@@ -161,13 +173,39 @@ export default defineComponent({
   overflow: overlay;
 }
 
-/*.split.resizable.vertical > .splitter {
-  cursor: row-resize;
-  width: 10px;
+.layout-container,
+.split {
+  background: transparent;
 }
 
-.split.resizable.horizontal > .splitter {
-  cursor: col-resize;
-  height: 10px;
-} */
+.layout-container > * {
+  margin: 4px;
+  box-sizing: border-box;
+}
+
+/* all views */
+.layout-container .view {
+  border: solid 1px transparent;
+  transition: all 0.3s;
+}
+
+/* preview */
+.layout-container > .preview {
+  background: rgba(155, 155, 155, 0.4);
+  border: dashed 1px #666;
+  transition: all 0.3s;
+}
+
+/* drag layer */
+.layout-container > .drag {
+  display: block;
+  transform: scale(1) translate(0%, 0%);
+  transition: transform 0.3s;
+}
+
+.layout-container > .drag.dragging {
+  opacity: 0.5;
+  box-shadow: 0 0 20px 4px rgba(0, 0, 0, 0.4);
+  transform: scale(0.5) translate(0%, 0%);
+}
 </style>
