@@ -28,7 +28,10 @@ export default defineComponent({
 
   setup(props, context) {
     let rLayout = reactive(props.layout);
-
+    let dragMoveState = {
+      dragTargetNodeID: null,
+      dragMoveNodeID: null,
+    };
     let splitProps = (node: TreeNode) => {
       let cssClass = ["split", node.layout, node.resizable ? "resizable" : ""];
       return {
@@ -48,16 +51,25 @@ export default defineComponent({
         onmousedown: onViewDragStart,
       };
     };
-    // TODO:
+    // TODO: move root
     let onViewDragStart = (event: MouseEvent) => {
       if (event.button !== 0) return;
+
       const nodeIdAttr = event.target.hasAttribute("nodeId");
       const dragAttr = event.target.hasAttribute("pane-drag");
       if (!nodeIdAttr && !dragAttr) return;
 
       var el = event.target;
       const nodeId = el.getAttribute("nodeId");
+      dragMoveState.dragMoveNodeID = nodeId;
       console.log(nodeId);
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      const trect = el.getBoundingClientRect();
+      console.log(trect);
+      console.log(event.clientX);
 
       document.addEventListener("mousemove", onViewDrag);
       document.addEventListener("mouseup", onViewDrop);
@@ -68,11 +80,40 @@ export default defineComponent({
       event.preventDefault();
       event.stopPropagation();
       // drag.over = null; // reset over
-      console.log("dragging");
+      var el = document.elementFromPoint(event.clientX, event.clientY);
+
+      // find parent
+      var viewDom = el;
+      for (
+        ;
+        viewDom && viewDom.matches && !viewDom.matches(".view");
+        viewDom = viewDom.parentNode
+      ) {}
+      let f = viewDom instanceof HTMLElement; // skip if parent is not an HTMLElement
+
+      if (f) {
+        dragMoveState.dragTargetNodeID = viewDom.getAttribute("nodeId");
+      } else {
+        dragMoveState.dragTargetNodeID = null;
+      }
+      console.log(dragMoveState.dragTargetNodeID);
     };
 
     let onViewDrop = (event: MouseEvent) => {
       if (event.button !== 0) return;
+      if (dragMoveState.dragMoveNodeID === dragMoveState.dragTargetNodeID) return;
+      let tmpNode = rLayout[dragMoveState.dragMoveNodeID];
+      tmpNode.twinID = dragMoveState.dragTargetNodeID;
+      moveChild(rLayout, tmpNode);
+      // {
+      //   ID: dragMoveNodeID,
+      //   name: rLayout[dragMoveNodeID].name,
+      //   isShow: true,
+      //   layout: "horizontal",
+      //   relativePosition: 1,
+      //   twinID: dragTargetNodeID,
+      // }
+
       document.removeEventListener("mousemove", onViewDrag);
       document.removeEventListener("mouseup", onViewDrop);
     };
