@@ -90,12 +90,15 @@ const removeChild = (tree: Stump, nodeID: string) => {
                 let rmIdx = tree[pID].children.indexOf(nodeID)
                 tree[pID].children.splice(rmIdx, 1);
                 let leftChildID = tree[pID].children[0]
-                let grandPID = tree[pID].parentID
                 tree[leftChildID].proportion = tree[pID].proportion
-                tree[leftChildID].parentID = grandPID
-                let pIDX = tree[grandPID].children.indexOf(pID)
-                tree[grandPID].children.splice(pIDX, 1, leftChildID)
-                delete tree[pID]
+
+                if (pID !== "treeRoot") {
+                    let grandPID = tree[pID].parentID
+                    tree[leftChildID].parentID = grandPID
+                    let pIDX = tree[grandPID].children.indexOf(pID)
+                    tree[grandPID].children.splice(pIDX, 1, leftChildID)
+                    delete tree[pID]
+                }
                 break;
             }
             default: {

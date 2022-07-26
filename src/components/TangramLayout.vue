@@ -12,7 +12,7 @@ import {
 
 import Pane from "./Pane.vue";
 import Splitter from "./Splitter.vue";
-
+import Hello from "./HelloWorld.vue";
 // import "./style.css";
 
 export default defineComponent({
@@ -48,7 +48,7 @@ export default defineComponent({
         class: "leaf view",
         targetView: "view-" + node.ID,
         style: { "flex-basis": `${node.proportion}%` },
-        onmousedown: onViewDragStart,
+        onmousedown: node.ID !== "treeRoot" ? onViewDragStart : "",
       };
     };
     // TODO: move root
@@ -101,10 +101,12 @@ export default defineComponent({
 
     let onViewDrop = (event: MouseEvent) => {
       if (event.button !== 0) return;
-      if (dragMoveState.dragMoveNodeID === dragMoveState.dragTargetNodeID) return;
-      let tmpNode = rLayout[dragMoveState.dragMoveNodeID];
-      tmpNode.twinID = dragMoveState.dragTargetNodeID;
-      moveChild(rLayout, tmpNode);
+      if (dragMoveState.dragMoveNodeID !== dragMoveState.dragTargetNodeID) {
+        let tmpNode = rLayout[dragMoveState.dragMoveNodeID];
+        tmpNode.twinID = dragMoveState.dragTargetNodeID;
+        moveChild(rLayout, tmpNode);
+      }
+
       // {
       //   ID: dragMoveNodeID,
       //   name: rLayout[dragMoveNodeID].name,
@@ -120,7 +122,8 @@ export default defineComponent({
 
     const walk = (Node: TreeNode): VNode => {
       let split: VNode;
-      if (Node.children.length > 1) {
+
+      if (Node.children.length >= 1) {
         // this is a branch node
         let subSplit: VNode[] = [];
         for (let i = 0; i < Node.children.length; i++) {
@@ -145,7 +148,9 @@ export default defineComponent({
       } else {
         // create a new leaf node
         split = h("div", leafProps(Node), [
-          h(Pane, { title: Node.name }, [h(Node.vNode, {}, [])]),
+          Node.ID !== "treeRoot"
+            ? h(Pane, { title: Node.name }, [h(Node.vNode, {}, [])])
+            : h("div", { class: "emptyLayout" }, ["Empty Layout"]),
         ]);
       }
       return split;
@@ -178,6 +183,16 @@ export default defineComponent({
           "button",
           {
             onClick: () => {
+              // insertChild(rLayout, {
+              //   ID: "1",
+              //   name: "Pane 1",
+              //   layout: "horizontal",
+              //   resizable: true,
+              //   relativePosition: 1,
+              //   twinID: undefined,
+              //   minSize: 20,
+              //   vNode: Hello,
+              // });
               moveChild(rLayout, {
                 ID: "4",
                 name: "New Panel 4",
@@ -206,6 +221,10 @@ export default defineComponent({
   height: 100%;
 }
 
+.emptyLayout {
+  margin-top: 20%;
+  color: gray;
+}
 .leaf {
   background-color: chartreuse;
   border: 1px;
