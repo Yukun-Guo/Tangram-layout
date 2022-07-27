@@ -186,11 +186,11 @@ export default defineComponent({
 }
 
 .split.resizable.vertical.splitter {
-  cursor: row-resize;
+  cursor: n-resize;
 }
 
 .split.resizable.horizontal.splitter {
-  cursor: col-resize;
+  cursor: e-resize;
 }
 
 /* Splitter styling */

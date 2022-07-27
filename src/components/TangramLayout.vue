@@ -13,7 +13,6 @@ import {
 import Pane from "./Pane.vue";
 import Splitter from "./Splitter.vue";
 import Hello from "./HelloWorld.vue";
-// import "./style.css";
 
 export default defineComponent({
   name: "TangramLayout",
@@ -35,11 +34,9 @@ export default defineComponent({
       layout: "horizontal",
       relativePosition: 1,
     });
-    let drag = null;
+    // let drag = ref(0);
     const previewRef = ref() as Ref<HTMLElement>;
     const dragRef = ref() as Ref<HTMLElement>;
-    let dragw = ref(1);
-    let dragh = ref(1);
 
     let splitProps = (node: TreeNode) => {
       let cssClass = ["split", node.layout, node.resizable ? "resizable" : ""];
@@ -64,7 +61,10 @@ export default defineComponent({
     let getTargetPosInfo = (event: MouseEvent, targetRect: DOMRect, gap: number) => {
       let layout = null;
       let relativePosition = null;
-      if (!targetRect) return { layout, relativePosition };
+      let pIdx = -1;
+      if (!targetRect) {
+        return { layout, relativePosition, pIdx };
+      }
       gap = gap || 0.3;
       var gapW = targetRect.width * gap;
       var gapH = targetRect.height * gap;
@@ -80,14 +80,13 @@ export default defineComponent({
         targetRect.width - gapW - tPos.x,
       ];
       var min = 0;
-      var idx = -1;
       pos.forEach((v, i) => {
         if (v < min) {
           min = v;
-          idx = i;
+          pIdx = i;
         }
       });
-      switch (idx) {
+      switch (pIdx) {
         case 0:
           layout = "vertical";
           relativePosition = 0;
@@ -109,7 +108,59 @@ export default defineComponent({
           relativePosition = null;
           break;
       }
-      return { layout, relativePosition };
+      return { layout, relativePosition, pIdx };
+    };
+    let moveDragPane = (event: MouseEvent) => {
+      if (!event) {
+        dragRef.value.style.display = "none";
+        return;
+      }
+      dragRef.value.style.display = "block";
+      dragRef.value.style.top = event.clientY - 10 + "px";
+      dragRef.value.style.left = event.clientX - 25 + "px";
+    };
+    let previewPane = (event: MouseEvent, targetRect: DOMRect, pIdx: number) => {
+      if (!event || pIdx === -1 || !targetRect) {
+        previewRef.value.style.display = "none";
+        return;
+      }
+      previewRef.value.style.display = "inherit";
+      let gap = 0.5;
+      var gapW = targetRect.width * gap;
+      var gapH = targetRect.height * gap;
+
+      previewRef.value.style.position = "absolute";
+      switch (pIdx) {
+        case 0:
+          previewRef.value.style.top = targetRect.top + "px";
+          previewRef.value.style.left = targetRect.left + "px";
+          previewRef.value.style.width = targetRect.width + "px";
+          previewRef.value.style.height = gapH + "px";
+
+          break;
+        case 1:
+          previewRef.value.style.top = targetRect.bottom - gapH + "px";
+          previewRef.value.style.left = targetRect.left + "px";
+          previewRef.value.style.width = targetRect.width + "px";
+          previewRef.value.style.height = gapH + "px";
+
+          break;
+        case 2:
+          previewRef.value.style.top = targetRect.top + "px";
+          previewRef.value.style.left = targetRect.left + "px";
+          previewRef.value.style.width = gapW + "px";
+          previewRef.value.style.height = targetRect.height + "px";
+          break;
+        case 3:
+          previewRef.value.style.top = targetRect.top + "px";
+          previewRef.value.style.left = targetRect.right - gapW + "px";
+          previewRef.value.style.width = gapW + "px";
+          previewRef.value.style.height = targetRect.height + "px";
+          break;
+        default:
+          previewRef.value.style.display = "none";
+          break;
+      }
     };
 
     let onViewDragStart = (event: MouseEvent) => {
@@ -122,15 +173,16 @@ export default defineComponent({
       var el = event.target;
       const nodeId = el.getAttribute("nodeId");
       dragMoveState.dragMoveNodeID = nodeId;
+      dragMoveState.dragTargetNodeID = nodeId;
       dragMoveState.dragMoveNodeName = rLayout[nodeId].name;
-      console.log(nodeId);
+      // console.log(nodeId);
 
       event.preventDefault();
       event.stopPropagation();
 
       const trect = el.getBoundingClientRect();
-      console.log(trect);
-      console.log(event.clientX);
+      // console.log(trect);
+      // console.log(event.clientX);
 
       // drag = {
       //   nodeName: node,
@@ -146,8 +198,11 @@ export default defineComponent({
       event.preventDefault();
       event.stopPropagation();
       // drag.over = null; // reset over
+      dragRef.value.style.pointerEvents = "none";
+      previewRef.value.style.pointerEvents = "none";
       var viewDom = document.elementFromPoint(event.clientX, event.clientY);
-
+      previewRef.value.style.pointerEvents = null;
+      dragRef.value.style.pointerEvents = null;
       // find parent
       for (
         ;
@@ -164,14 +219,17 @@ export default defineComponent({
       let tarPosInfo = getTargetPosInfo(event, targetDomRect);
       dragMoveState.layout = tarPosInfo.layout;
       dragMoveState.relativePosition = tarPosInfo.relativePosition;
-
-      console.log((previewRef.value.style.width = "200px"));
-
-      console.log(previewRef);
+      if (dragMoveState.dragMoveNodeID !== dragMoveState.dragTargetNodeID) {
+        previewPane(event, targetDomRect, tarPosInfo.pIdx);
+      }
+      moveDragPane(event);
     };
 
     let onViewDrop = (event: MouseEvent) => {
       if (event.button !== 0) return;
+      previewPane(0);
+      moveDragPane(0);
+      console.log(dragMoveState);
       if (
         dragMoveState.dragMoveNodeID !== dragMoveState.dragTargetNodeID &&
         dragMoveState.layout
@@ -282,16 +340,19 @@ export default defineComponent({
           ["addnode"]
         ),
         walk(rLayout.treeRoot),
-        h("div", { class: "preview", ref: previewRef }, [dragMoveState.dragMoveNodeName]),
+        h("div", { class: "preview", ref: previewRef }, []),
         h(
           "div",
           {
-            // class: "drag" + (drag ? "dragging" : ""),
+            class: "drag",
             ref: dragRef,
             style: {
-              width: dragw,
-              height: dragh,
-              transformOrigin: drag ? drag.offset.x + "px " + drag.offset.y + "px" : "",
+              height: "20",
+              padding: "2px",
+              overflow: "hidden",
+              color: "white",
+              backgroundColor: "#35363a",
+              opacity: "0.5",
             },
           },
           [dragMoveState.dragMoveNodeName]
@@ -329,7 +390,7 @@ export default defineComponent({
 }
 
 .layout-container > * {
-  margin: 4px;
+  /* margin: 4px; */
   box-sizing: border-box;
 }
 
@@ -341,21 +402,22 @@ export default defineComponent({
 
 /* preview */
 .layout-container > .preview {
+  display: none;
   background: rgba(155, 155, 155, 0.4);
   border: dashed 1px #666;
-  transition: all 0.03s;
+  transition: all 0.3s;
 }
-
 /* drag layer */
 .layout-container > .drag {
   display: block;
   transform: scale(1) translate(0%, 0%);
   transition: transform 0.1s;
+  position: absolute;
 }
 
-.layout-container > .drag.dragging {
+/* .layout-container > .drag.dragging {
   opacity: 0.5;
   box-shadow: 0 0 20px 4px rgba(0, 0, 0, 0.4);
   transform: scale(0.5) translate(0%, 0%);
-}
+} */
 </style>

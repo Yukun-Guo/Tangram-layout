@@ -28,7 +28,7 @@ let node2: TreeNode = {
 };
 let node3: TreeNode = {
   ID: "3",
-  name: "Pane 3",
+  name: "Pane Pane Pane Pane Pane Pane Pane3",
   layout: "vertical",
   resizable: true,
   relativePosition: 0,

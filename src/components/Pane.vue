@@ -3,6 +3,7 @@
     <div class="header">
       {{ title }}
     </div>
+    <span @click="test()">x</span>
     <div class="content">
       <slot />
     </div>
@@ -14,6 +15,12 @@ export default {
   props: {
     title: { type: String, default: "" },
   },
+  setup(props) {
+    let test = () => {
+      console.log("test");
+    };
+    return { test };
+  },
 };
 </script>
 <style scoped>
@@ -21,6 +28,7 @@ export default {
   position: relative;
   overflow: hidden;
   flex: 1 1 auto;
+
   height: 100%;
   width: 100%;
   flex-direction: column;
@@ -28,9 +36,12 @@ export default {
 }
 
 .pane > .header {
-  height: 20px;
-  padding: 2px;
+  height: 0.9em;
+  padding: 3px;
+  margin-right: 50px;
   color: white;
+  overflow: hidden;
+
   background-color: #35363a;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -42,7 +53,7 @@ export default {
 
 .pane > .content {
   position: absolute;
-  top: 20px;
+  top: 3.3em;
   right: 0;
   bottom: 0;
   left: 0;
