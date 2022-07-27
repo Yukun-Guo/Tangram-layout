@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, ref, reactive, h, VNode, computed } from "vue";
+import { defineComponent, ref, reactive, h, VNode, computed, nextTick } from "vue";
 import {
   TreeNode,
   Stump,
@@ -36,22 +36,10 @@ export default defineComponent({
       relativePosition: 1,
     });
     let drag = null;
-    let previewDiv = h("div", { class: "preview" }, []);
-
+    const previewRef = ref() as Ref<HTMLElement>;
+    const dragRef = ref() as Ref<HTMLElement>;
     let dragw = ref(1);
     let dragh = ref(1);
-    let dragDiv = h(
-      "div",
-      {
-        // class: "drag" + (drag ? "dragging" : ""),
-        style: {
-          width: dragw,
-          height: dragh,
-          transformOrigin: drag ? drag.offset.x + "px " + drag.offset.y + "px" : "",
-        },
-      },
-      [dragMoveState.dragMoveNodeName]
-    );
 
     let splitProps = (node: TreeNode) => {
       let cssClass = ["split", node.layout, node.resizable ? "resizable" : ""];
@@ -161,7 +149,6 @@ export default defineComponent({
       var viewDom = document.elementFromPoint(event.clientX, event.clientY);
 
       // find parent
-      // var viewDom = el;
       for (
         ;
         viewDom && viewDom.matches && !viewDom.matches(".view");
@@ -177,9 +164,10 @@ export default defineComponent({
       let tarPosInfo = getTargetPosInfo(event, targetDomRect);
       dragMoveState.layout = tarPosInfo.layout;
       dragMoveState.relativePosition = tarPosInfo.relativePosition;
-      dragw = "20px";
-      dragh = "20px";
-      console.log(dragMoveState);
+
+      console.log((previewRef.value.style.width = "200px"));
+
+      console.log(previewRef);
     };
 
     let onViewDrop = (event: MouseEvent) => {
@@ -266,7 +254,7 @@ export default defineComponent({
 
     //    context.expose({ rLayout });
     return () =>
-      h("div", { style: { height: "100%" } }, [
+      h("div", { class: "layout-container", style: { height: "100%" } }, [
         h(
           "button",
           {
@@ -294,8 +282,20 @@ export default defineComponent({
           ["addnode"]
         ),
         walk(rLayout.treeRoot),
-        previewDiv,
-        dragDiv,
+        h("div", { class: "preview", ref: previewRef }, [dragMoveState.dragMoveNodeName]),
+        h(
+          "div",
+          {
+            // class: "drag" + (drag ? "dragging" : ""),
+            ref: dragRef,
+            style: {
+              width: dragw,
+              height: dragh,
+              transformOrigin: drag ? drag.offset.x + "px " + drag.offset.y + "px" : "",
+            },
+          },
+          [dragMoveState.dragMoveNodeName]
+        ),
       ]);
   },
 });
@@ -336,21 +336,21 @@ export default defineComponent({
 /* all views */
 .layout-container .view {
   border: solid 1px transparent;
-  transition: all 0.3s;
+  transition: all 0.1s;
 }
 
 /* preview */
 .layout-container > .preview {
   background: rgba(155, 155, 155, 0.4);
   border: dashed 1px #666;
-  transition: all 0.3s;
+  transition: all 0.03s;
 }
 
 /* drag layer */
 .layout-container > .drag {
   display: block;
   transform: scale(1) translate(0%, 0%);
-  transition: transform 0.3s;
+  transition: transform 0.1s;
 }
 
 .layout-container > .drag.dragging {
