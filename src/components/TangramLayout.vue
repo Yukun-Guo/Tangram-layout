@@ -51,7 +51,7 @@ export default defineComponent({
         onmousedown: node.ID !== "treeRoot" ? onViewDragStart : "",
       };
     };
-    // TODO: move root
+
     let onViewDragStart = (event: MouseEvent) => {
       if (event.button !== 0) return;
 
@@ -89,9 +89,8 @@ export default defineComponent({
         viewDom && viewDom.matches && !viewDom.matches(".view");
         viewDom = viewDom.parentNode
       ) {}
-      let f = viewDom instanceof HTMLElement; // skip if parent is not an HTMLElement
-
-      if (f) {
+      if (viewDom instanceof HTMLElement) {
+        // skip if parent is not an HTMLElement
         dragMoveState.dragTargetNodeID = viewDom.getAttribute("nodeId");
       } else {
         dragMoveState.dragTargetNodeID = null;
