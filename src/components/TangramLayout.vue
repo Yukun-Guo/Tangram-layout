@@ -28,10 +28,31 @@ export default defineComponent({
 
   setup(props, context) {
     let rLayout = reactive(props.layout);
-    let dragMoveState = {
+    let dragMoveState = reactive({
+      dragMoveNodeName: null,
       dragTargetNodeID: null,
       dragMoveNodeID: null,
-    };
+      layout: "horizontal",
+      relativePosition: 1,
+    });
+    let drag = null;
+    let previewDiv = h("div", { class: "preview" }, []);
+
+    let dragw = ref(1);
+    let dragh = ref(1);
+    let dragDiv = h(
+      "div",
+      {
+        // class: "drag" + (drag ? "dragging" : ""),
+        style: {
+          width: dragw,
+          height: dragh,
+          transformOrigin: drag ? drag.offset.x + "px " + drag.offset.y + "px" : "",
+        },
+      },
+      [dragMoveState.dragMoveNodeName]
+    );
+
     let splitProps = (node: TreeNode) => {
       let cssClass = ["split", node.layout, node.resizable ? "resizable" : ""];
       return {
@@ -52,6 +73,57 @@ export default defineComponent({
       };
     };
 
+    let getTargetPosInfo = (event: MouseEvent, targetRect: DOMRect, gap: number) => {
+      let layout = null;
+      let relativePosition = null;
+      if (!targetRect) return { layout, relativePosition };
+      gap = gap || 0.3;
+      var gapW = targetRect.width * gap;
+      var gapH = targetRect.height * gap;
+      var tPos = {
+        x: event.clientX - targetRect.left,
+        y: event.clientY - targetRect.top,
+      };
+
+      var pos = [
+        tPos.y - gapH,
+        targetRect.height - gapH - tPos.y,
+        tPos.x - gapW,
+        targetRect.width - gapW - tPos.x,
+      ];
+      var min = 0;
+      var idx = -1;
+      pos.forEach((v, i) => {
+        if (v < min) {
+          min = v;
+          idx = i;
+        }
+      });
+      switch (idx) {
+        case 0:
+          layout = "vertical";
+          relativePosition = 0;
+          break;
+        case 1:
+          layout = "vertical";
+          relativePosition = 1;
+          break;
+        case 2:
+          layout = "horizontal";
+          relativePosition = 0;
+          break;
+        case 3:
+          layout = "horizontal";
+          relativePosition = 1;
+          break;
+        default:
+          layout = null;
+          relativePosition = null;
+          break;
+      }
+      return { layout, relativePosition };
+    };
+
     let onViewDragStart = (event: MouseEvent) => {
       if (event.button !== 0) return;
 
@@ -62,6 +134,7 @@ export default defineComponent({
       var el = event.target;
       const nodeId = el.getAttribute("nodeId");
       dragMoveState.dragMoveNodeID = nodeId;
+      dragMoveState.dragMoveNodeName = rLayout[nodeId].name;
       console.log(nodeId);
 
       event.preventDefault();
@@ -70,6 +143,11 @@ export default defineComponent({
       const trect = el.getBoundingClientRect();
       console.log(trect);
       console.log(event.clientX);
+
+      // drag = {
+      //   nodeName: node,
+      //   offset: {x: e.clientX - trect.left, y: e.clientY - trect.top}
+      // }
 
       document.addEventListener("mousemove", onViewDrag);
       document.addEventListener("mouseup", onViewDrop);
@@ -80,29 +158,40 @@ export default defineComponent({
       event.preventDefault();
       event.stopPropagation();
       // drag.over = null; // reset over
-      var el = document.elementFromPoint(event.clientX, event.clientY);
+      var viewDom = document.elementFromPoint(event.clientX, event.clientY);
 
       // find parent
-      var viewDom = el;
+      // var viewDom = el;
       for (
         ;
         viewDom && viewDom.matches && !viewDom.matches(".view");
         viewDom = viewDom.parentNode
       ) {}
+      let targetDomRect = null;
+      dragMoveState.dragTargetNodeID = null;
       if (viewDom instanceof HTMLElement) {
         // skip if parent is not an HTMLElement
         dragMoveState.dragTargetNodeID = viewDom.getAttribute("nodeId");
-      } else {
-        dragMoveState.dragTargetNodeID = null;
+        targetDomRect = viewDom.getBoundingClientRect();
       }
-      console.log(dragMoveState.dragTargetNodeID);
+      let tarPosInfo = getTargetPosInfo(event, targetDomRect);
+      dragMoveState.layout = tarPosInfo.layout;
+      dragMoveState.relativePosition = tarPosInfo.relativePosition;
+      dragw = "20px";
+      dragh = "20px";
+      console.log(dragMoveState);
     };
 
     let onViewDrop = (event: MouseEvent) => {
       if (event.button !== 0) return;
-      if (dragMoveState.dragMoveNodeID !== dragMoveState.dragTargetNodeID) {
+      if (
+        dragMoveState.dragMoveNodeID !== dragMoveState.dragTargetNodeID &&
+        dragMoveState.layout
+      ) {
         let tmpNode = rLayout[dragMoveState.dragMoveNodeID];
         tmpNode.twinID = dragMoveState.dragTargetNodeID;
+        tmpNode.layout = dragMoveState.layout;
+        tmpNode.relativePosition = dragMoveState.relativePosition;
         moveChild(rLayout, tmpNode);
       }
 
@@ -205,6 +294,8 @@ export default defineComponent({
           ["addnode"]
         ),
         walk(rLayout.treeRoot),
+        previewDiv,
+        dragDiv,
       ]);
   },
 });
