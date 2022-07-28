@@ -21,8 +21,8 @@ import {
 
 import Pane from "./Pane.vue";
 import Splitter from "./Splitter.vue";
-import Hello from "../plugins/HelloWorld.vue";
-import Hello2 from "../plugins/HelloWorld2.vue";
+import Hello from "../plugins/HelloWorld/HelloWorld.vue";
+import Hello2 from "../plugins/HelloWorld/HelloWorld2.vue";
 
 export default defineComponent({
   name: "TangramLayout",
