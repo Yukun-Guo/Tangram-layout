@@ -283,7 +283,9 @@ export default defineComponent({
         // create a new leaf node
         split = h("div", leafProps(Node), [
           Node.ID !== "treeRoot"
-            ? h(Pane, { title: Node.name }, [h(Node.vNode, {}, [])])
+            ? h(Pane, { onRemoveNode, onAddNode, title: Node.name, nodeId: Node.ID }, [
+                h(Node.vNode, {}, []),
+              ])
             : h("div", { class: "emptyLayout" }, ["Empty Layout"]),
         ]);
       }
@@ -310,7 +312,21 @@ export default defineComponent({
       rLayout[splitInfo.childID2].proportion = totalP - leftP;
     };
 
-    //    context.expose({ rLayout });
+    const onRemoveNode = (nodeID) => {
+      removeChild(rLayout, nodeID);
+    };
+
+    const onAddNode = (nodeInfo) => {
+      let newNode = {
+        name: nodeInfo.name,
+        layout: "horizontal",
+        relativePosition: 0,
+        twinID: nodeInfo.twinID,
+        vNode: Hello,
+      };
+      insertChild(rLayout, newNode);
+    };
+
     return () =>
       h("div", { class: "layout-container", style: { height: "100%" } }, [
         h(

@@ -14,7 +14,7 @@ export default defineComponent({
     dir: { type: String, default: "horizontal" },
     splitPortion: { type: String, default: "50%" },
   },
-  emits: ["splitResize"],
+  // emits: ["splitResize"],
   setup(props, context) {
     let state = reactive({
       resizing: false,

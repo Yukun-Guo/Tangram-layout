@@ -1,6 +1,7 @@
 <template>
   <div class="hello">
     {{ msg }}
+    <button @click="showMsg()">show message</button>
   </div>
 </template>
 
@@ -10,8 +11,10 @@ import { defineComponent } from "vue";
 export default defineComponent({
   setup() {
     let msg = "Hello World!";
-
-    return { msg };
+    let showMsg = () => {
+      alert(msg);
+    };
+    return { msg, showMsg };
   },
 });
 </script>
