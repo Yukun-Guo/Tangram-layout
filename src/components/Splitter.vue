@@ -204,7 +204,7 @@ export default defineComponent({
 .split.resizable.splitter:hover,
 .split.resizable.resizing.splitter {
   background: rgb(0, 122, 201);
-  transition: all 0.1s;
+  transition: all 0.3s;
 }
 
 .split.resizable > .splitter::after {

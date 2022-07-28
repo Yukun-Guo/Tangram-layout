@@ -381,7 +381,7 @@ export default defineComponent({
             ref: dragRef,
             style: {
               height: "20",
-              padding: "2px",
+              // padding: "2px",
               overflow: "hidden",
               color: "white",
               backgroundColor: "#35363a",
