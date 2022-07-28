@@ -1,5 +1,14 @@
 <script lang="ts">
-import { defineComponent, ref, reactive, h, VNode, computed, nextTick } from "vue";
+import {
+  defineComponent,
+  ref,
+  reactive,
+  h,
+  VNode,
+  computed,
+  nextTick,
+  markeRaw,
+} from "vue";
 import {
   TreeNode,
   Stump,
@@ -12,7 +21,8 @@ import {
 
 import Pane from "./Pane.vue";
 import Splitter from "./Splitter.vue";
-import Hello from "./HelloWorld.vue";
+import Hello from "../plugins/HelloWorld.vue";
+import Hello2 from "../plugins/HelloWorld2.vue";
 
 export default defineComponent({
   name: "TangramLayout",
@@ -229,7 +239,7 @@ export default defineComponent({
       if (event.button !== 0) return;
       previewPane(0);
       moveDragPane(0);
-      console.log(dragMoveState);
+      // console.log(dragMoveState);
       if (
         dragMoveState.dragMoveNodeID !== dragMoveState.dragTargetNodeID &&
         dragMoveState.layout
@@ -283,10 +293,17 @@ export default defineComponent({
         // create a new leaf node
         split = h("div", leafProps(Node), [
           Node.ID !== "treeRoot"
-            ? h(Pane, { onRemoveNode, onAddNode, title: Node.name, nodeId: Node.ID }, [
-                h(Node.vNode, {}, []),
-              ])
-            : h("div", { class: "emptyLayout" }, ["Empty Layout"]),
+            ? h(
+                Pane,
+                {
+                  onRemoveNode,
+                  onAddNode,
+                  title: Node.name,
+                  nodeId: Node.ID,
+                },
+                () => h(Node.vNode, {}, () => [])
+              )
+            : h("div", { class: "emptyLayout" }, () => ["Empty Layout"]),
         ]);
       }
       return split;
