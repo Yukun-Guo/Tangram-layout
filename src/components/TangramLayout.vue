@@ -1,13 +1,12 @@
 <script lang="ts">
 import {
   defineComponent,
+  defineAsyncComponent,
   ref,
   reactive,
   h,
   VNode,
   computed,
-  nextTick,
-  markeRaw,
 } from "vue";
 import {
   TreeNode,
@@ -21,14 +20,15 @@ import {
 
 import Pane from "./Pane.vue";
 import Splitter from "./Splitter.vue";
-import Hello from "../plugins/HelloWorld/HelloWorld.vue";
-import Hello2 from "../plugins/HelloWorld/HelloWorld2.vue";
 
 export default defineComponent({
   name: "TangramLayout",
   props: {
     layout: {
       default: createTree(),
+    },
+    plugins: {
+      default: [{ id: "Hello", dir: "../plugins/HelloWorld/HelloWorld.vue" }],
     },
     minSize: {
       default: 0,
@@ -44,9 +44,18 @@ export default defineComponent({
       layout: "horizontal",
       relativePosition: 1,
     });
-    // let drag = ref(0);
-    const previewRef = ref() as Ref<HTMLElement>;
-    const dragRef = ref() as Ref<HTMLElement>;
+
+    //Dynamically loaD components
+    const pluginComponents = ref(new Map<String, any>());
+    props.plugins.forEach((e) => {
+      pluginComponents.value.set(
+        e.id,
+        defineAsyncComponent(() => import(e.dir))
+      );
+    });
+
+    const previewRef = ref() as Ref<HTMLElement>; //dragging preview
+    const dragRef = ref() as Ref<HTMLElement>; //dragging node thumbnail
 
     let splitProps = (node: TreeNode) => {
       let cssClass = ["split", node.layout, node.resizable ? "resizable" : ""];
@@ -120,6 +129,7 @@ export default defineComponent({
       }
       return { layout, relativePosition, pIdx };
     };
+
     let moveDragPane = (event: MouseEvent) => {
       if (!event) {
         dragRef.value.style.display = "none";
@@ -129,6 +139,7 @@ export default defineComponent({
       dragRef.value.style.top = event.clientY - 10 + "px";
       dragRef.value.style.left = event.clientX - 25 + "px";
     };
+
     let previewPane = (event: MouseEvent, targetRect: DOMRect, pIdx: number) => {
       if (!event || pIdx === -1 || !targetRect) {
         previewRef.value.style.display = "none";
@@ -264,51 +275,6 @@ export default defineComponent({
       document.removeEventListener("mouseup", onViewDrop);
     };
 
-    const walk = (Node: TreeNode): VNode => {
-      let split: VNode;
-
-      if (Node.children.length >= 1) {
-        // this is a branch node
-        let subSplit: VNode[] = [];
-        for (let i = 0; i < Node.children.length; i++) {
-          const child1 = Node.children[i];
-          const child2 = Node.children[i + 1];
-
-          subSplit.push(walk(rLayout[child1]));
-          subSplit.push(
-            h(Splitter, {
-              onSplitResize,
-              leftChildId: child1,
-              rightChildId: child2,
-              leftChildMinSize: rLayout[child1].minSize,
-              rightChildMinSize: child2 === undefined ? 1 : rLayout[child2].minSize,
-              resizable: Node.resizable,
-              dir: Node.layout,
-            })
-          );
-        }
-        subSplit.pop();
-        split = h("div", splitProps(Node), subSplit);
-      } else {
-        // create a new leaf node
-        split = h("div", leafProps(Node), [
-          Node.ID !== "treeRoot"
-            ? h(
-                Pane,
-                {
-                  onRemoveNode,
-                  onAddNode,
-                  title: Node.name,
-                  nodeId: Node.ID,
-                },
-                () => h(Node.vNode, {}, () => [])
-              )
-            : h("div", { class: "emptyLayout" }, () => ["Empty Layout"]),
-        ]);
-      }
-      return split;
-    };
-
     const onSplitResize = (splitInfo: {
       p: number;
       childID1: string;
@@ -339,9 +305,56 @@ export default defineComponent({
         layout: "horizontal",
         relativePosition: 0,
         twinID: nodeInfo.twinID,
-        vNode: Hello,
+        vNode: "Hello2",
       };
+
       insertChild(rLayout, newNode);
+    };
+
+    const walk = (Node: TreeNode): VNode => {
+      let split: VNode;
+
+      if (Node.children.length >= 1) {
+        // this is a branch node
+        let subSplit: VNode[] = [];
+        for (let i = 0; i < Node.children.length; i++) {
+          const child1 = Node.children[i];
+          const child2 = Node.children[i + 1];
+
+          subSplit.push(walk(rLayout[child1]));
+          subSplit.push(
+            h(Splitter, {
+              onSplitResize,
+              leftChildId: child1,
+              rightChildId: child2,
+              leftChildMinSize: rLayout[child1].minSize,
+              rightChildMinSize: child2 === undefined ? 1 : rLayout[child2].minSize,
+              resizable: Node.resizable,
+              dir: Node.layout,
+            })
+          );
+        }
+        subSplit.pop();
+        split = h("div", splitProps(Node), subSplit);
+      } else {
+        // create a new leaf node
+        console.log(pluginComponents.value);
+        split = h("div", leafProps(Node), [
+          Node.ID !== "treeRoot"
+            ? h(
+                Pane,
+                {
+                  onRemoveNode,
+                  onAddNode,
+                  title: Node.name,
+                  nodeId: Node.ID,
+                },
+                () => h(pluginComponents.value.get(Node.vNode), {}, () => [])
+              )
+            : h("div", { class: "emptyLayout" }, () => ["Empty Layout"]),
+        ]);
+      }
+      return split;
     };
 
     return () =>

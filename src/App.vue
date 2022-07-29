@@ -3,7 +3,7 @@
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import TangramLayout from "./components/TangramLayout.vue";
 import { createTree, TreeNode, insertChild, removeChild } from "./utils/tree";
-import Hello from "./plugins/HelloWorld.vue";
+import { pluginConfigs } from "./plugins/plugin.config.js";
 let layout_tree = createTree();
 
 let node1: TreeNode = {
@@ -14,7 +14,7 @@ let node1: TreeNode = {
   relativePosition: 1,
   twinID: undefined,
   minSize: 20,
-  vNode: Hello,
+  vNode: "Hello",
 };
 let node2: TreeNode = {
   ID: "2",
@@ -24,7 +24,7 @@ let node2: TreeNode = {
   relativePosition: 1,
   twinID: node1.ID,
   minSize: 20,
-  vNode: Hello,
+  vNode: "Hello",
 };
 let node3: TreeNode = {
   ID: "3",
@@ -34,7 +34,7 @@ let node3: TreeNode = {
   relativePosition: 0,
   twinID: node2.ID,
   minSize: 50,
-  vNode: Hello,
+  vNode: "Hello2",
 };
 let node4: TreeNode = {
   ID: "4",
@@ -44,7 +44,7 @@ let node4: TreeNode = {
   relativePosition: 0,
   twinID: node2.ID,
   minSize: 20,
-  vNode: Hello,
+  vNode: "Hello",
 };
 let node5: TreeNode = {
   ID: "5",
@@ -54,7 +54,7 @@ let node5: TreeNode = {
   relativePosition: 1,
   twinID: node2.ID,
   minSize: 20,
-  vNode: Hello,
+  vNode: "Hello",
 };
 let node6: TreeNode = {
   ID: "6",
@@ -64,7 +64,7 @@ let node6: TreeNode = {
   relativePosition: 0,
   twinID: node3.ID,
   minSize: 40,
-  vNode: Hello,
+  vNode: "Hello",
 };
 let node7: TreeNode = {
   ID: "7",
@@ -74,7 +74,7 @@ let node7: TreeNode = {
   relativePosition: 0,
   twinID: node5.ID,
   minSize: 20,
-  vNode: Hello,
+  vNode: "Hello",
 };
 let node8: TreeNode = {
   ID: "8",
@@ -84,7 +84,7 @@ let node8: TreeNode = {
   relativePosition: 0,
   twinID: node2.ID,
   minSize: 20,
-  vNode: Hello,
+  vNode: "Hello",
 };
 let node9: TreeNode = {
   ID: "9",
@@ -94,7 +94,7 @@ let node9: TreeNode = {
   relativePosition: 0,
   twinID: node7.ID,
   minSize: 20,
-  vNode: Hello,
+  vNode: "Hello",
 };
 insertChild(layout_tree, node1);
 insertChild(layout_tree, node2);
@@ -106,10 +106,11 @@ insertChild(layout_tree, node7);
 insertChild(layout_tree, node8);
 insertChild(layout_tree, node9);
 // removeChild(layout_tree, "4");
+console.log(pluginConfigs);
 </script>
 
 <template>
-  <TangramLayout :layout="layout_tree" />
+  <TangramLayout :layout="layout_tree" :plugins="pluginConfigs" />
 </template>
 
 <style>
