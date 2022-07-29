@@ -3,7 +3,7 @@
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import TangramLayout from "./components/TangramLayout.vue";
 import { createTree, TreeNode, insertChild, removeChild } from "./utils/tree";
-import { pluginConfigs } from "./plugins/plugin.config.js";
+import pluginConfigs from "./plugins/plugin.config.json";
 let layout_tree = createTree();
 
 let node1: TreeNode = {
@@ -106,7 +106,7 @@ insertChild(layout_tree, node7);
 insertChild(layout_tree, node8);
 insertChild(layout_tree, node9);
 // removeChild(layout_tree, "4");
-console.log(pluginConfigs);
+// console.log(pluginConfigs);
 </script>
 
 <template>

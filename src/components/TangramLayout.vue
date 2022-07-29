@@ -6,6 +6,7 @@ import {
   reactive,
   h,
   VNode,
+  shallowRef,
   computed,
 } from "vue";
 import {
@@ -28,7 +29,7 @@ export default defineComponent({
       default: createTree(),
     },
     plugins: {
-      default: [{ id: "Hello", dir: "../plugins/HelloWorld/HelloWorld.vue" }],
+      default: { Hello: "../plugins/HelloWorld/HelloWorld.vue" },
     },
     minSize: {
       default: 0,
@@ -46,13 +47,17 @@ export default defineComponent({
     });
 
     //Dynamically loaD components
-    const pluginComponents = ref(new Map<String, any>());
-    props.plugins.forEach((e) => {
+    const pluginComponents = shallowRef(new Map<String, any>());
+    Object.keys(props.plugins).forEach((element) => {
       pluginComponents.value.set(
-        e.id,
-        defineAsyncComponent(() => import(e.dir))
+        element,
+        defineAsyncComponent(() => import(props.plugins[element]))
       );
     });
+    pluginComponents.value.set(
+      "GetStarted",
+      defineAsyncComponent(() => import("./GetStarted.vue"))
+    );
 
     const previewRef = ref() as Ref<HTMLElement>; //dragging preview
     const dragRef = ref() as Ref<HTMLElement>; //dragging node thumbnail
@@ -261,16 +266,6 @@ export default defineComponent({
         tmpNode.relativePosition = dragMoveState.relativePosition;
         moveChild(rLayout, tmpNode);
       }
-
-      // {
-      //   ID: dragMoveNodeID,
-      //   name: rLayout[dragMoveNodeID].name,
-      //   isShow: true,
-      //   layout: "horizontal",
-      //   relativePosition: 1,
-      //   twinID: dragTargetNodeID,
-      // }
-
       document.removeEventListener("mousemove", onViewDrag);
       document.removeEventListener("mouseup", onViewDrop);
     };
@@ -300,14 +295,24 @@ export default defineComponent({
     };
 
     const onAddNode = (nodeInfo) => {
-      let newNode = {
-        name: nodeInfo.name,
-        layout: "horizontal",
-        relativePosition: 0,
-        twinID: nodeInfo.twinID,
-        vNode: "Hello2",
-      };
-
+      let newNode;
+      if (nodeInfo.vNode === undefined) {
+        newNode = {
+          name: "Get Started",
+          layout: "horizontal",
+          relativePosition: 0,
+          twinID: undefined,
+          vNode: "GetStarted",
+        };
+      } else {
+        newNode = {
+          name: nodeInfo.name,
+          layout: "horizontal",
+          relativePosition: 0,
+          twinID: nodeInfo.twinID,
+          vNode: nodeInfo.vNode,
+        };
+      }
       insertChild(rLayout, newNode);
     };
 
@@ -338,7 +343,7 @@ export default defineComponent({
         split = h("div", splitProps(Node), subSplit);
       } else {
         // create a new leaf node
-        console.log(pluginComponents.value);
+        // console.log(pluginComponents.value);
         split = h("div", leafProps(Node), [
           Node.ID !== "treeRoot"
             ? h(
@@ -348,10 +353,13 @@ export default defineComponent({
                   onAddNode,
                   title: Node.name,
                   nodeId: Node.ID,
+                  plugins: props.plugins,
                 },
                 () => h(pluginComponents.value.get(Node.vNode), {}, () => [])
               )
-            : h("div", { class: "emptyLayout" }, () => ["Empty Layout"]),
+            : h("div", { class: "emptyLayout", onmousedown: onAddNode }, [
+                "Click me to start",
+              ]),
         ]);
       }
       return split;
@@ -359,32 +367,7 @@ export default defineComponent({
 
     return () =>
       h("div", { class: "layout-container", style: { height: "100%" } }, [
-        h(
-          "button",
-          {
-            onClick: () => {
-              // insertChild(rLayout, {
-              //   ID: "1",
-              //   name: "Pane 1",
-              //   layout: "horizontal",
-              //   resizable: true,
-              //   relativePosition: 1,
-              //   twinID: undefined,
-              //   minSize: 20,
-              //   vNode: Hello,
-              // });
-              moveChild(rLayout, {
-                ID: "4",
-                name: "New Panel 4",
-                isShow: true,
-                layout: "horizontal",
-                relativePosition: 1,
-                twinID: "3",
-              });
-            },
-          },
-          ["addnode"]
-        ),
+        "Tangram play ground",
         walk(rLayout.treeRoot),
         h("div", { class: "preview", ref: previewRef }, []),
         h(
@@ -394,7 +377,6 @@ export default defineComponent({
             ref: dragRef,
             style: {
               height: "20",
-              // padding: "2px",
               overflow: "hidden",
               color: "white",
               backgroundColor: "#35363a",
@@ -422,8 +404,13 @@ export default defineComponent({
   margin-top: 20%;
   color: gray;
 }
+.emptyLayout:hover {
+  margin-top: 20%;
+  color: white;
+}
+
 .leaf {
-  background-color: chartreuse;
+  background-color: #1e1e1e;
   border: 1px;
   border-style: dotted;
   border-color: black;
@@ -460,10 +447,4 @@ export default defineComponent({
   transition: transform 0.1s;
   position: absolute;
 }
-
-/* .layout-container > .drag.dragging {
-  opacity: 0.5;
-  box-shadow: 0 0 20px 4px rgba(0, 0, 0, 0.4);
-  transform: scale(0.5) translate(0%, 0%);
-} */
 </style>

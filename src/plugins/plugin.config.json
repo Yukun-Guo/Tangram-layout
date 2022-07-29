@@ -1,0 +1,4 @@
+{
+    "Hello": "../plugins/HelloWorld/HelloWorld.vue",
+    "Hello2": "../plugins/HelloWorld2/HelloWorld2.vue"
+}

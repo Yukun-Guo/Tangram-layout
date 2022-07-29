@@ -2,8 +2,15 @@
   <div class="pane">
     <div class="header">
       <div class="controller">
-        <span class="close" @click="removeNode()">×</span>
-        <span class="add" @click="addNode()">+</span>
+        <span class="close control" @click="removeNode()">×</span>
+        <span class="dropdown control">
+          <span>+</span>
+          <div class="dropdown-content">
+            <div v-for="item in Object.keys(plugins)" :key="item" @click="addNode(item)">
+              {{ item }}
+            </div>
+          </div>
+        </span>
       </div>
       <span class="title">{{ title }}</span>
     </div>
@@ -15,27 +22,36 @@
 </template>
 
 <script lang="ts">
+import { ref } from "vue";
 export default {
   props: {
     title: { type: String, default: "" },
     nodeId: { type: String, default: "" },
+    plugins: { type: Object, default: { Welcome: "" } },
   },
   setup(props, context) {
-    let test = () => {
-      alert("test");
-    };
-
+    let plugins = props.plugins;
+    let showDropDown = ref(1);
     let removeNode = () => {
       context.emit("removeNode", props.nodeId);
     };
-    let addNode = () => {
-      context.emit("addNode", {
-        name: "test",
-        twinID: props.nodeId,
-        vNode: `<div>test</div>`,
-      });
+    let addNode = (nodeID) => {
+      let text;
+      let nodeName = prompt("Please give a name to the new View:", nodeID);
+      if (nodeName === null) return;
+      switch (nodeName.trim()) {
+        case "":
+          alert("Name can't be empty");
+          break;
+        default:
+          context.emit("addNode", {
+            name: nodeName.trim(),
+            twinID: props.nodeId,
+            vNode: nodeID,
+          });
+      }
     };
-    return { test, removeNode, addNode };
+    return { showDropDown, removeNode, addNode };
   },
 };
 </script>
@@ -66,18 +82,19 @@ export default {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  /*
-added
- */
+
   display: flex;
   flex-direction: row;
 }
 
-.pane > .header:hover>~.controller > * {
+.pane > .header:hover ~ .controller > * {
   color: white;
 }
 
 .pane > .header > .controller {
+  /* position: relative; */
+  pointer-events: auto;
+  /* display: inline-block; */
   margin-right: auto;
 }
 
@@ -85,11 +102,11 @@ added
   margin-right: auto;
 }
 
-.pane > .header > .controller > * {
+.pane > .header > .controller > .control {
   height: 0.9em;
   color: grey;
   overflow: auto;
-  background-color: #35363a;
+  background-color: #363636;
   border-style: solid;
   border-radius: 3px;
   border-width: 0px;
@@ -107,10 +124,32 @@ added
   margin-right: 2px;
 }
 
-.pane > .header > .controller > .add:hover {
+/* Dropdown Content (Hidden by Default) */
+.pane > .header > .controller > .dropdown > .dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #363636;
+  padding: 4px;
+  text-align: left;
+
+  min-width: 80px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdown-item {
+  padding: 2px;
+}
+
+.pane > .header > .controller > .dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.pane > .header > .controller > .dropdown:hover {
   color: white;
   background-color: #858585;
 }
+
 .pane > .header > .controller > .close:hover {
   color: white;
   background-color: red;
@@ -127,4 +166,34 @@ added
   overflow: auto;
   pointer-events: initial;
 }
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  /* position: relative; */
+  /* margin-right: auto; */
+  /* display: inline-block; */
+}
+
+/* Links inside the dropdown */
+.dropdown-content div {
+  color: white;
+  padding: 2px 2px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content div:hover {
+  background-color: #04395e;
+}
+
+/* Show the dropdown menu on hover */
+/* .controller:hover .dropdown-content {
+  display: block;
+} */
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+/* .controller:hover .dropbtn {
+  background-color: #3e8e41;
+} */
 </style>
