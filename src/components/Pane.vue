@@ -73,9 +73,9 @@ export default {
   font-size: 15px;
   height: 18px;
   padding: 3px;
-  color: white;
+  color: #c4c4c4;
   overflow: hidden;
-  background-color: #35363a;
+  background-color: #2d2d2d;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -104,9 +104,9 @@ export default {
 
 .pane > .header > .controller > .control {
   height: 0.9em;
-  color: grey;
+  color: #c5c5c5;
   overflow: auto;
-  background-color: #363636;
+  background-color: #2d2d2d;
   border-style: solid;
   border-radius: 3px;
   border-width: 0px;
@@ -167,14 +167,7 @@ export default {
   pointer-events: initial;
 }
 
-/* The container <div> - needed to position the dropdown content */
-.dropdown {
-  /* position: relative; */
-  /* margin-right: auto; */
-  /* display: inline-block; */
-}
-
-/* Links inside the dropdown */
+/* Divs inside the dropdown */
 .dropdown-content div {
   color: white;
   padding: 2px 2px;
@@ -186,14 +179,4 @@ export default {
 .dropdown-content div:hover {
   background-color: #04395e;
 }
-
-/* Show the dropdown menu on hover */
-/* .controller:hover .dropdown-content {
-  display: block;
-} */
-
-/* Change the background color of the dropdown button when the dropdown content is shown */
-/* .controller:hover .dropbtn {
-  background-color: #3e8e41;
-} */
 </style>

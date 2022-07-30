@@ -195,9 +195,9 @@ export default defineComponent({
 
 /* Splitter styling */
 .split.splitter {
-  flex-basis: 6px;
+  flex-basis: 4px;
   position: relative;
-  background: transparent;
+  background: #2d2d2d;
   transition: all 0.3s;
 }
 
@@ -210,7 +210,7 @@ export default defineComponent({
 .split.resizable > .splitter::after {
   position: absolute;
   content: " ";
-  z-index: 10;
+  z-index: 1;
   transition: all 0.3s;
   top: -8px;
   right: -8px;

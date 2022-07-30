@@ -367,7 +367,6 @@ export default defineComponent({
 
     return () =>
       h("div", { class: "layout-container", style: { height: "100%" } }, [
-        "Tangram play ground",
         walk(rLayout.treeRoot),
         h("div", { class: "preview", ref: previewRef }, []),
         h(
@@ -417,11 +416,6 @@ export default defineComponent({
   overflow: overlay;
 }
 
-.layout-container,
-.split {
-  background: transparent;
-}
-
 .layout-container > * {
   /* margin: 4px; */
   box-sizing: border-box;
@@ -429,22 +423,22 @@ export default defineComponent({
 
 /* all views */
 .layout-container .view {
-  border: solid 1px transparent;
-  transition: all 0.1s;
+  border: transparent;
+  transition: all 0.3s;
 }
 
 /* preview */
 .layout-container > .preview {
   display: none;
   background: rgba(155, 155, 155, 0.4);
-  border: dashed 1px #666;
+  /* border: dashed 1px #666; */
   transition: all 0.3s;
 }
 /* drag layer */
 .layout-container > .drag {
   display: block;
   transform: scale(1) translate(0%, 0%);
-  transition: transform 0.1s;
+  transition: transform 0.3s;
   position: absolute;
 }
 </style>

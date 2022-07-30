@@ -22,5 +22,6 @@ export default defineComponent({
 <style scoped>
 .hello {
   background-color: "blue";
+  color: #cccccc;
 }
 </style>
