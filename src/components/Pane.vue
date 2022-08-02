@@ -1,13 +1,21 @@
 <template>
   <div class="pane">
-    <div class="header" :style="{ color: themes.color, backgroundColor: themes.bgColor }">
-      <div class="controller">
+    <div
+      class="header"
+      :style="{
+        color: theme.color,
+        backgroundColor: theme.bgColor,
+        display: showControls ? 'flex' : 'block',
+      }"
+      v-if="showHeader"
+    >
+      <div class="controller" v-show="showControls">
         <span class="close control" @click="removeNode()">×</span>
         <span class="dropdown control">
           <span>+</span>
           <div
             class="dropdown-content"
-            :style="{ color: themes.color, backgroundColor: themes.bgColor }"
+            :style="{ color: theme.color, backgroundColor: theme.bgColor }"
           >
             <div
               v-for="item in Object.keys(plugins)"
@@ -23,7 +31,7 @@
       <span class="title">{{ title }}</span>
     </div>
 
-    <div class="content">
+    <div class="content" :style="{ top: showHeader ? '1.6em' : '0em' }">
       <slot />
     </div>
   </div>
@@ -36,22 +44,20 @@ export default {
     title: { type: String, default: "" },
     nodeId: { type: String, default: "" },
     plugins: { type: Object, default: { Welcome: "" } },
-    themes: {
+    theme: {
       type: Object,
       default: {
         bgColor: "#2d2d2d",
         color: "#2d2d2d",
-        dropdownHover: "#858585",
-        dropdownContentHover: "#858585",
       },
     },
+    showControls: { type: Boolean, default: true },
+    showHeader: { type: Boolean, default: true },
   },
   setup(props, context) {
-    let plugins = props.plugins;
-    let theme = reactive(props.themes);
     let showDropDown = ref(1);
     let setTitle = (item) => {
-      return `path: plugins/${plugins[item].dir}\nDescription: ${plugins[item].description}`;
+      return `path: plugins/${props.plugins[item].dir}\nDescription: ${props.plugins[item].description}`;
     };
     let removeNode = () => {
       context.emit("removeNode", props.nodeId);
@@ -72,7 +78,7 @@ export default {
           });
       }
     };
-    return { showDropDown, removeNode, addNode, setTitle, theme };
+    return { showDropDown, removeNode, addNode, setTitle };
   },
 };
 </script>
@@ -94,9 +100,7 @@ export default {
   font-size: 15px;
   height: 18px;
   padding: 3px;
-  /* color: v-bind("theme.color"); */
   overflow: hidden;
-  /* background: v-bind("theme.bgColor"); */
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -104,13 +108,12 @@ export default {
   -ms-user-select: none;
   user-select: none;
 
-  display: flex;
   flex-direction: row;
 }
 
-.pane > .header:hover ~ .controller > * {
+/* .pane > .header:hover .controller {
   color: white;
-}
+} */
 
 .pane > .header > .controller {
   /* position: relative; */
@@ -125,9 +128,7 @@ export default {
 
 .pane > .header > .controller > .control {
   height: 0.9em;
-  /* color: v-bind("theme.value.color"); */
   overflow: auto;
-  /* background-color: v-bind("theme.value.bgColor"); */
   border-style: solid;
   border-radius: 3px;
   border-width: 0px;
@@ -149,7 +150,6 @@ export default {
 .pane > .header > .controller > .dropdown > .dropdown-content {
   display: none;
   position: absolute;
-  /* background: v-bind("theme.value.bgColor"); */
   padding: 4px;
   text-align: left;
 

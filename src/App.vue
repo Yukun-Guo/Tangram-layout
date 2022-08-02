@@ -109,6 +109,8 @@ insertChild(layout_tree, node9);
 // removeChild(layout_tree, "4");
 // console.log(pluginConfigs);
 
+let showControls = ref(true);
+let showHeader = ref(true);
 let theme = ref("dark");
 let changeTheme = () => {
   switch (theme.value) {
@@ -122,8 +124,16 @@ let changeTheme = () => {
 </script>
 
 <template>
-  <button @click="changeTheme">Change Theme({{ theme }})</button>
-  <TangramLayout :layout="layout_tree" :plugins="pluginConfigs" :theme="theme" />
+  <button @click="showHeader = !showHeader">showHeader ({{ showHeader }})</button>
+  <button @click="showControls = !showControls">showControls ({{ showControls }})</button>
+  <button @click="changeTheme">Change Theme ({{ theme }})</button>
+  <TangramLayout
+    :layout="layout_tree"
+    :plugins="pluginConfigs"
+    :theme="theme"
+    :showHeader="showHeader"
+    :showControls="showControls"
+  />
 </template>
 
 <style>
@@ -144,5 +154,8 @@ let changeTheme = () => {
 body {
   min-height: 80vh;
   height: 80vh;
+}
+button {
+  margin: 3px;
 }
 </style>

@@ -37,6 +37,12 @@ export default defineComponent({
     theme: {
       default: "dark",
     },
+    showHeader: {
+      default: true,
+    },
+    showControls: {
+      default: true,
+    },
   },
 
   setup(props, context) {
@@ -58,22 +64,21 @@ export default defineComponent({
         case "dark":
           leaf.bgColor = "#1e1e1e";
           leaf.color = "#c4c4c4";
+
           split.bgColor = "#2d2d2d";
-          drag.bgColor = "#2d2d2d";
+
           pane.bgColor = "#2d2d2d";
           pane.color = "#c4c4c4";
-          pane.dropdownHover = "#858585";
-          pane.dropdownContentHover = "#0060c0";
           break;
         default:
           // "light":
           leaf.bgColor = "#fefefe";
           leaf.color = "#2d2d2d";
+
           split.bgColor = "#ececec";
+
           pane.bgColor = "#ececec";
           pane.color = "#2d2d2d";
-          pane.dropdownHover = "#858585";
-          pane.dropdownContentHover = "#858585";
       }
       return { leaf, split, drag, pane };
     });
@@ -357,7 +362,6 @@ export default defineComponent({
         for (let i = 0; i < Node.children.length; i++) {
           const child1 = Node.children[i];
           const child2 = Node.children[i + 1];
-
           subSplit.push(walk(rLayout[child1]));
           subSplit.push(
             h(Splitter, {
@@ -386,13 +390,20 @@ export default defineComponent({
                   title: Node.name,
                   nodeId: Node.ID,
                   plugins: props.plugins,
-                  themes: themeColor.value.pane,
+                  theme: themeColor.value.pane,
+                  showHeader: props.showHeader,
+                  showControls: props.showControls,
                 },
                 () => h(pluginComponents.value.get(Node.vNode), {}, () => [])
               )
-            : h("div", { class: "emptyLayout", onmousedown: onAddNode }, [
-                "Click me to start",
-              ]),
+            : h(
+                "div",
+                {
+                  class: "emptyLayout",
+                  onmousedown: onAddNode,
+                },
+                ["Click me to start"]
+              ),
         ]);
       }
       return split;
@@ -410,8 +421,8 @@ export default defineComponent({
             style: {
               height: "20",
               overflow: "hidden",
-              color: "white",
-              backgroundColor: themeColor.value.drag.bgColor,
+              color: themeColor.value.leaf.color,
+              backgroundColor: themeColor.value.leaf.bgColor,
               opacity: "0.5",
             },
           },
@@ -436,12 +447,16 @@ export default defineComponent({
 }
 
 .emptyLayout {
+  width: 120px;
   margin-top: 20%;
+  margin-inline: auto;
   color: gray;
 }
 .emptyLayout:hover {
   margin-top: 20%;
-  color: white;
+  background: yellow;
+  box-sizing: content-box;
+  color: blue;
 }
 
 .leaf {
@@ -459,7 +474,7 @@ export default defineComponent({
 /* all views */
 .layout-container .view {
   border: transparent;
-  /* transition: all 0.01s; */
+  /* transition: all 0.0001s; */
 }
 
 /* preview */

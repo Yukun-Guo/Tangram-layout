@@ -1,7 +1,6 @@
 <template>
-  <div class="hello">
+  <div class="welcome">
     {{ msg }}
-    <button @click="showMsg()">show message</button>
   </div>
 </template>
 
@@ -11,18 +10,13 @@ import { defineComponent } from "vue";
 export default defineComponent({
   setup() {
     let msg = "Tangram UI Layout builder";
-    let showMsg = () => {
-      console.log(msg);
-    };
-    return { msg, showMsg };
+    return { msg };
   },
 });
 </script>
 
 <style scoped>
-.hello {
-  color: #cccccc;
-  background-color: #1e1e1e;
+.welcome {
   font-size: x-large;
   padding: 20%;
   height: 100%;
