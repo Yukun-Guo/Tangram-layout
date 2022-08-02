@@ -34,6 +34,9 @@ export default defineComponent({
     minSize: {
       default: 0,
     },
+    theme: {
+      default: "dark",
+    },
   },
 
   setup(props, context) {
@@ -45,13 +48,42 @@ export default defineComponent({
       layout: "horizontal",
       relativePosition: 1,
     });
+    let themeColor = computed(() => {
+      let leaf = {};
+      let split = {};
+      let drag = {};
+      let pane = {};
+      // let treeRoot = {};
+      switch (props.theme) {
+        case "dark":
+          leaf.bgColor = "#1e1e1e";
+          leaf.color = "#c4c4c4";
+          split.bgColor = "#2d2d2d";
+          drag.bgColor = "#2d2d2d";
+          pane.bgColor = "#2d2d2d";
+          pane.color = "#c4c4c4";
+          pane.dropdownHover = "#858585";
+          pane.dropdownContentHover = "#0060c0";
+          break;
+        default:
+          // "light":
+          leaf.bgColor = "#fefefe";
+          leaf.color = "#2d2d2d";
+          split.bgColor = "#ececec";
+          pane.bgColor = "#ececec";
+          pane.color = "#2d2d2d";
+          pane.dropdownHover = "#858585";
+          pane.dropdownContentHover = "#858585";
+      }
+      return { leaf, split, drag, pane };
+    });
 
-    //Dynamically loaD components
+    //Dynamically load components
     const pluginComponents = shallowRef(new Map<String, any>());
     Object.keys(props.plugins).forEach((element) => {
       pluginComponents.value.set(
         element,
-        defineAsyncComponent(() => import(props.plugins[element]))
+        defineAsyncComponent(() => import(`../plugins/${props.plugins[element].dir}`))
       );
     });
     pluginComponents.value.set(
@@ -67,7 +99,10 @@ export default defineComponent({
       return {
         id: node.ID,
         class: cssClass,
-        style: { "flex-basis": `${node.proportion}%` },
+        style: {
+          "background-color": themeColor.value.split.bgColor,
+          "flex-basis": `${node.proportion}%`,
+        },
       };
     };
 
@@ -77,7 +112,11 @@ export default defineComponent({
         nodeId: node.ID,
         class: "leaf view",
         targetView: "view-" + node.ID,
-        style: { "flex-basis": `${node.proportion}%` },
+        style: {
+          "background-color": themeColor.value.leaf.bgColor,
+          color: themeColor.value.leaf.color,
+          "flex-basis": `${node.proportion}%`,
+        },
         onmousedown: node.ID !== "treeRoot" ? onViewDragStart : "",
       };
     };
@@ -206,15 +245,6 @@ export default defineComponent({
       event.preventDefault();
       event.stopPropagation();
 
-      const trect = el.getBoundingClientRect();
-      // console.log(trect);
-      // console.log(event.clientX);
-
-      // drag = {
-      //   nodeName: node,
-      //   offset: {x: e.clientX - trect.left, y: e.clientY - trect.top}
-      // }
-
       document.addEventListener("mousemove", onViewDrag);
       document.addEventListener("mouseup", onViewDrop);
     };
@@ -247,6 +277,8 @@ export default defineComponent({
       dragMoveState.relativePosition = tarPosInfo.relativePosition;
       if (dragMoveState.dragMoveNodeID !== dragMoveState.dragTargetNodeID) {
         previewPane(event, targetDomRect, tarPosInfo.pIdx);
+      } else {
+        previewPane(0);
       }
       moveDragPane(event);
     };
@@ -354,6 +386,7 @@ export default defineComponent({
                   title: Node.name,
                   nodeId: Node.ID,
                   plugins: props.plugins,
+                  themes: themeColor.value.pane,
                 },
                 () => h(pluginComponents.value.get(Node.vNode), {}, () => [])
               )
@@ -364,7 +397,7 @@ export default defineComponent({
       }
       return split;
     };
-
+    context.expose({ themeColor });
     return () =>
       h("div", { class: "layout-container", style: { height: "100%" } }, [
         walk(rLayout.treeRoot),
@@ -378,7 +411,7 @@ export default defineComponent({
               height: "20",
               overflow: "hidden",
               color: "white",
-              backgroundColor: "#35363a",
+              backgroundColor: themeColor.value.drag.bgColor,
               opacity: "0.5",
             },
           },
@@ -396,6 +429,9 @@ export default defineComponent({
   flex: 1 0 auto;
   overflow: hidden;
   position: relative; */
+  border-color: #ececec;
+  border-width: 2px;
+  border-style: solid;
   height: 100%;
 }
 
@@ -409,7 +445,6 @@ export default defineComponent({
 }
 
 .leaf {
-  background-color: #1e1e1e;
   border: 1px;
   border-style: dotted;
   border-color: black;
@@ -424,14 +459,13 @@ export default defineComponent({
 /* all views */
 .layout-container .view {
   border: transparent;
-  transition: all 0.3s;
+  /* transition: all 0.01s; */
 }
 
 /* preview */
 .layout-container > .preview {
   display: none;
   background: rgba(155, 155, 155, 0.4);
-  /* border: dashed 1px #666; */
   transition: all 0.3s;
 }
 /* drag layer */

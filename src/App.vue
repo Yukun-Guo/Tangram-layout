@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
+import { ref } from "vue";
 import TangramLayout from "./components/TangramLayout.vue";
 import { createTree, TreeNode, insertChild, removeChild } from "./utils/tree";
 import pluginConfigs from "./plugins/plugin.config.json";
@@ -107,10 +108,22 @@ insertChild(layout_tree, node8);
 insertChild(layout_tree, node9);
 // removeChild(layout_tree, "4");
 // console.log(pluginConfigs);
+
+let theme = ref("dark");
+let changeTheme = () => {
+  switch (theme.value) {
+    case "dark":
+      theme.value = "light";
+      break;
+    default:
+      theme.value = "dark";
+  }
+};
 </script>
 
 <template>
-  <TangramLayout :layout="layout_tree" :plugins="pluginConfigs" />
+  <button @click="changeTheme">Change Theme({{ theme }})</button>
+  <TangramLayout :layout="layout_tree" :plugins="pluginConfigs" :theme="theme" />
 </template>
 
 <style>

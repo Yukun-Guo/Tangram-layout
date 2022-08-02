@@ -195,9 +195,8 @@ export default defineComponent({
 
 /* Splitter styling */
 .split.splitter {
-  flex-basis: 4px;
+  flex-basis: 5px;
   position: relative;
-  background: #2d2d2d;
   transition: all 0.3s;
 }
 

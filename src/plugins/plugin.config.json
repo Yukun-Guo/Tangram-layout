@@ -1,4 +1,14 @@
 {
-    "Hello": "../plugins/HelloWorld/HelloWorld.vue",
-    "Hello2": "../plugins/HelloWorld2/HelloWorld2.vue"
+    "Hello": {
+        "dir": "HelloWorld/HelloWorld.vue",
+        "description": "This is a test component Hello World"
+    },
+    "Hello2": {
+        "dir": "HelloWorld2/HelloWorld2.vue",
+        "description": "This is a test component Hello World2"
+    },
+    "Hello3": {
+        "dir": "HelloWorld3/HelloWorld3.vue",
+        "description": "This is a test component Hello World3"
+    }
 }

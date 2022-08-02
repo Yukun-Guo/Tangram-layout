@@ -1,12 +1,20 @@
 <template>
   <div class="pane">
-    <div class="header">
+    <div class="header" :style="{ color: themes.color, backgroundColor: themes.bgColor }">
       <div class="controller">
         <span class="close control" @click="removeNode()">×</span>
         <span class="dropdown control">
           <span>+</span>
-          <div class="dropdown-content">
-            <div v-for="item in Object.keys(plugins)" :key="item" @click="addNode(item)">
+          <div
+            class="dropdown-content"
+            :style="{ color: themes.color, backgroundColor: themes.bgColor }"
+          >
+            <div
+              v-for="item in Object.keys(plugins)"
+              :key="item"
+              :title="setTitle(item)"
+              @click="addNode(item)"
+            >
               {{ item }}
             </div>
           </div>
@@ -22,16 +30,29 @@
 </template>
 
 <script lang="ts">
-import { ref } from "vue";
+import { ref, reactive } from "vue";
 export default {
   props: {
     title: { type: String, default: "" },
     nodeId: { type: String, default: "" },
     plugins: { type: Object, default: { Welcome: "" } },
+    themes: {
+      type: Object,
+      default: {
+        bgColor: "#2d2d2d",
+        color: "#2d2d2d",
+        dropdownHover: "#858585",
+        dropdownContentHover: "#858585",
+      },
+    },
   },
   setup(props, context) {
     let plugins = props.plugins;
+    let theme = reactive(props.themes);
     let showDropDown = ref(1);
+    let setTitle = (item) => {
+      return `path: plugins/${plugins[item].dir}\nDescription: ${plugins[item].description}`;
+    };
     let removeNode = () => {
       context.emit("removeNode", props.nodeId);
     };
@@ -51,7 +72,7 @@ export default {
           });
       }
     };
-    return { showDropDown, removeNode, addNode };
+    return { showDropDown, removeNode, addNode, setTitle, theme };
   },
 };
 </script>
@@ -73,9 +94,9 @@ export default {
   font-size: 15px;
   height: 18px;
   padding: 3px;
-  color: #c4c4c4;
+  /* color: v-bind("theme.color"); */
   overflow: hidden;
-  background-color: #2d2d2d;
+  /* background: v-bind("theme.bgColor"); */
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -104,9 +125,9 @@ export default {
 
 .pane > .header > .controller > .control {
   height: 0.9em;
-  color: #c5c5c5;
+  /* color: v-bind("theme.value.color"); */
   overflow: auto;
-  background-color: #2d2d2d;
+  /* background-color: v-bind("theme.value.bgColor"); */
   border-style: solid;
   border-radius: 3px;
   border-width: 0px;
@@ -128,7 +149,7 @@ export default {
 .pane > .header > .controller > .dropdown > .dropdown-content {
   display: none;
   position: absolute;
-  background-color: #363636;
+  /* background: v-bind("theme.value.bgColor"); */
   padding: 4px;
   text-align: left;
 
@@ -146,8 +167,8 @@ export default {
 }
 
 .pane > .header > .controller > .dropdown:hover {
-  color: white;
-  background-color: #858585;
+  color: #2d2d2d;
+  background: #d8d8d8;
 }
 
 .pane > .header > .controller > .close:hover {
@@ -169,7 +190,6 @@ export default {
 
 /* Divs inside the dropdown */
 .dropdown-content div {
-  color: white;
   padding: 2px 2px;
   text-decoration: none;
   display: block;
@@ -177,6 +197,7 @@ export default {
 
 /* Change color of dropdown links on hover */
 .dropdown-content div:hover {
-  background-color: #04395e;
+  background-color: #0060c0;
+  color: white;
 }
 </style>
