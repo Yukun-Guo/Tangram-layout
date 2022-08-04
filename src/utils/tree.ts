@@ -124,25 +124,3 @@ function uuid() {
 
 export type { TreeNode, Stump }
 export { createTree, getTreeSize, insertChild, removeChild, moveChild, uuid }
-
-// //test
-// let tree = new Tree()
-
-// let node1: TreeNode = { ID: '1', isShow: false, layout: 0, relativePosition: 1, twinID: undefined }
-// let node2: TreeNode = { ID: '2', isShow: false, layout: 1, relativePosition: 1, twinID: node1.ID }
-// let node3: TreeNode = { ID: '3', isShow: false, layout: 0, relativePosition: 0, twinID: node1.ID }
-// let node4: TreeNode = { ID: '4', isShow: false, layout: 1, relativePosition: 0, twinID: node2.ID }
-// let node5: TreeNode = { ID: '5', isShow: false, layout: 1, relativePosition: 1, twinID: node2.ID }
-// let node6: TreeNode = { ID: '6', isShow: false, layout: 0, relativePosition: 0, twinID: node3.ID }
-// let node7: TreeNode = { ID: '7', isShow: false, layout: 0, relativePosition: 0, twinID: node5.ID }
-// tree.insertChild(node1)
-// tree.insertChild(node2)
-// tree.insertChild(node3)
-// tree.insertChild(node4)
-// tree.insertChild(node5)
-// tree.insertChild(node6)
-// tree.insertChild(node7)
-// tree.removeChild(node4.ID)
-// tree.moveChild({ ID: '2', isShow: false, layout: 1, relativePosition: 1, twinID: node7.ID })
-// tree.moveChild({ ID: '7', isShow: false, layout: 0, relativePosition: 1, twinID: node3.ID })
-// console.log(tree.tree)
