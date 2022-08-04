@@ -11,7 +11,6 @@ import {
 } from "vue";
 import {
   TreeNode,
-  Stump,
   createTree,
   getTreeSize,
   removeChild,
@@ -29,10 +28,7 @@ export default defineComponent({
       default: createTree(),
     },
     plugins: {
-      default: { Hello: "../plugins/HelloWorld/HelloWorld.vue" },
-    },
-    minSize: {
-      default: 0,
+      default: {},
     },
     theme: {
       default: "dark",
@@ -100,7 +96,7 @@ export default defineComponent({
     const dragRef = ref() as Ref<HTMLElement>; //dragging node thumbnail
 
     let splitProps = (node: TreeNode) => {
-      let cssClass = ["split", node.layout, node.resizable ? "resizable" : ""];
+      let cssClass = ["split", node.layout]; //, node.resizable ? "resizable" : ""
       return {
         id: node.ID,
         class: cssClass,
@@ -315,12 +311,10 @@ export default defineComponent({
       var totalP =
         rLayout[splitInfo.childID1].proportion + rLayout[splitInfo.childID2].proportion;
 
-      var leftP = Math.min(
-        Math.max(totalP * splitInfo.p, props.minSize),
-        totalP - props.minSize
-      );
-      // console.log("totalP " + totalP);
+      var leftP = Math.min(totalP * splitInfo.p, totalP);
 
+      //
+      // console.log(splitInfo.p);
       // console.log(leftP);
 
       rLayout[splitInfo.childID1].proportion = leftP;
@@ -370,7 +364,7 @@ export default defineComponent({
               rightChildId: child2,
               leftChildMinSize: rLayout[child1].minSize,
               rightChildMinSize: child2 === undefined ? 1 : rLayout[child2].minSize,
-              resizable: Node.resizable,
+              // resizable: Node.resizable,
               dir: Node.layout,
             })
           );

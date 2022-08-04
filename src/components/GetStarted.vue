@@ -9,7 +9,7 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   setup() {
-    let msg = "Tangram UI Layout builder";
+    let msg = "Tangram, A Split and Drag Layout";
     return { msg };
   },
 });

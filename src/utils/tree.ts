@@ -1,6 +1,3 @@
-// import { TreeNode, Stump } from "./types";
-import { uuid } from "./short-uuid"
-
 interface TreeNode {
     ID: string
     layout: 'horizontal' | 'vertical'
@@ -118,8 +115,15 @@ const moveChild = (tree: Stump, newNode: TreeNode) => {
     insertChild(tree, newNode)
 }
 
+function uuid() {
+    return 'Uidxxxyxxx_xxxyxxxid'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
 export type { TreeNode, Stump }
-export { createTree, getTreeSize, insertChild, removeChild, moveChild }
+export { createTree, getTreeSize, insertChild, removeChild, moveChild, uuid }
 
 // //test
 // let tree = new Tree()

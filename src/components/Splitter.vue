@@ -8,9 +8,9 @@ export default defineComponent({
   props: {
     leftChildId: { type: String, default: null },
     rightChildId: { type: String, default: null },
-    leftChildMinSize: { type: Number, default: 1 },
-    rightChildMinSize: { type: Number, default: 1 },
-    resizable: { type: Boolean, default: true },
+    leftChildMinSize: { type: Number, default: 0 },
+    rightChildMinSize: { type: Number, default: 0 },
+    // resizable: { type: Boolean, default: true },
     dir: { type: String, default: "horizontal" },
     splitPortion: { type: String, default: "50%" },
   },
@@ -28,11 +28,11 @@ export default defineComponent({
       "splitter",
       props.dir,
       state.resizing ? "resizing" : "",
-      props.resizable ? "resizable" : "",
+      // props.resizable ? "resizable" : "",
     ]);
 
     let startResize = (event: MouseEvent) => {
-      if (!props.resizable || event.button !== 0) return;
+      if (event.button !== 0) return; //!props.resizable ||
       // console.log("startResize");
       event.stopPropagation();
       event.preventDefault();
@@ -185,11 +185,13 @@ export default defineComponent({
   overflow: hidden;
 }
 
-.split.resizable.vertical.splitter {
+.split.vertical.splitter {
+  /*.resizable */
   cursor: n-resize;
 }
 
-.split.resizable.horizontal.splitter {
+.split.horizontal.splitter {
+  /*.resizable */
   cursor: e-resize;
 }
 
@@ -200,13 +202,15 @@ export default defineComponent({
   transition: all 0.3s;
 }
 
-.split.resizable.splitter:hover,
-.split.resizable.resizing.splitter {
+.split.splitter:hover,/*.resizable */
+.split.resizing.splitter {
+  /*.resizable */
   background: rgb(0, 122, 201);
   transition: all 0.3s;
 }
 
-.split.resizable > .splitter::after {
+.split > .splitter::after {
+  /*.resizable */
   position: absolute;
   content: " ";
   z-index: 1;
