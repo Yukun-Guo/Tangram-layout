@@ -199,25 +199,47 @@ export default defineComponent({
 .split.splitter {
   flex-basis: 5px;
   position: relative;
+  background: transparent;
   transition: all 0.3s;
 }
 
-.split.splitter:hover,/*.resizable */
+.split.splitter:hover,
 .split.resizing.splitter {
-  /*.resizable */
   background: rgb(0, 122, 201);
   transition: all 0.3s;
 }
 
-.split > .splitter::after {
-  /*.resizable */
+/* .split.splitter::after {
+  display: block;
   position: absolute;
   content: " ";
-  z-index: 1;
+  z-index: 10;
   transition: all 0.3s;
   top: -8px;
   right: -8px;
   bottom: -8px;
   left: -8px;
 }
+
+.split.splitter::after {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.split.horizontal.splitter::after {
+  right: -6px;
+  left: -6px;
+}
+
+.split.vertical.splitter::after {
+  top: -6px;
+  bottom: -6px;
+}
+
+.split.resizing.splitter::after,
+.split.splitter:hover::after {
+  background: rgb(0, 122, 201);
+} */
 </style>
