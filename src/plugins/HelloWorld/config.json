@@ -1,4 +1,5 @@
 {
     "id": "Hello",
-    "dir":"./plugins/HelloWorld/HelloWorld.vue"
+    "dir": "./plugins/HelloWorld/HelloWorld.vue",
+    "description": "This is a test component Hello World"
 }
