@@ -57,22 +57,6 @@ export default defineComponent({
           }
         });
 
-        // if (h) {
-        //   var leftChildW =
-        //     Math.min(
-        //       Math.max(event.x - leftChildRect.left, leftChildMinSize[1]),
-        //       rightChildRect.right - rightChildMinSize[1]
-        //     ) /
-        //     (leftChildRect.width + rightChildRect.width);
-        // } else {
-        //   var leftChildH =
-        //     Math.min(
-        //       Math.max(event.y - leftChildRect.top, leftChildMinSize[2]),
-        //       rightChildRect.bottom - rightChildMinSize[2]
-        //     ) /
-        //     (leftChildRect.height + rightChildRect.height);
-        // }
-
         var leftChildProportion = h
           ? Math.min(
               Math.max(event.x - leftChildRect.left, props.leftChildMinSize),
@@ -85,30 +69,7 @@ export default defineComponent({
             ) /
             (leftChildRect.height + rightChildRect.height);
 
-        // console.log("right rect", rightChildRect);
-
-        // console.log("x-left", event.x - leftChildRect.left);
-        // console.log("right min size", props.rightChildMinSize);
-        // console.log("right.right", rightChildRect.right);
-
-        // console.log("max left", rightChildRect.right - props.rightChildMinSize);
-        // console.log(
-        //   "left size",
-        //   Math.min(
-        //     Math.max(event.x - leftChildRect.left, props.leftChildMinSize),
-        //     rightChildRect.right - props.rightChildMinSize
-        //   )
-        // );
-
-        // console.log(event.x);
-
-        // var leftChildProportion = h
-        //   ? (event.x - leftChildRect.left) / (leftChildRect.width + rightChildRect.width)
-        //   : (event.y - leftChildRect.top) /
-        //     (leftChildRect.height + rightChildRect.height);
-
         leftChildProportion = Math.min(Math.max(0.0, leftChildProportion), 1.0);
-        // console.log("leftp " + leftChildProportion);
 
         context.emit("splitResize", {
           p: leftChildProportion,
