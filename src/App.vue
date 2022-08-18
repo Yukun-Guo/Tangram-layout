@@ -33,8 +33,8 @@ let node2: TreeNode = {
 let node3: TreeNode = {
   ID: "3",
   name: "Pane3",
-  layout: "vertical",
-  relativePosition: 0,
+  layout: "horizontal",
+  relativePosition: 1,
   twinID: node2.ID,
   minSize: 0,
   vNode: "Hello2",
@@ -43,53 +43,8 @@ let node4: TreeNode = {
   ID: "4",
   name: "Pane 4",
   layout: "vertical",
-  relativePosition: 0,
-  twinID: node2.ID,
-  minSize: 0,
-  vNode: "Hello",
-};
-let node5: TreeNode = {
-  ID: "5",
-  name: "Pane 5",
-  layout: "horizontal",
   relativePosition: 1,
   twinID: node2.ID,
-  minSize: 0,
-  vNode: "Hello",
-};
-let node6: TreeNode = {
-  ID: "6",
-  name: "Pane 6",
-  layout: "horizontal",
-  relativePosition: 0,
-  twinID: node3.ID,
-  minSize: 0,
-  vNode: "Hello",
-};
-let node7: TreeNode = {
-  ID: "7",
-  name: "Pane 7",
-  layout: "horizontal",
-  relativePosition: 0,
-  twinID: node5.ID,
-  minSize: 0,
-  vNode: "Hello",
-};
-let node8: TreeNode = {
-  ID: "8",
-  name: "Pane 8",
-  layout: "vertical",
-  relativePosition: 0,
-  twinID: node2.ID,
-  minSize: 0,
-  vNode: "Hello",
-};
-let node9: TreeNode = {
-  ID: "9",
-  name: "Pane 9",
-  layout: "vertical",
-  relativePosition: 0,
-  twinID: node7.ID,
   minSize: 0,
   vNode: "Hello",
 };
@@ -97,11 +52,6 @@ insertChild(layout_tree, node1);
 insertChild(layout_tree, node2);
 insertChild(layout_tree, node3);
 insertChild(layout_tree, node4);
-insertChild(layout_tree, node5);
-insertChild(layout_tree, node6);
-insertChild(layout_tree, node7);
-insertChild(layout_tree, node8);
-insertChild(layout_tree, node9);
 
 let showControls = ref(true);
 let showHeader = ref(true);
