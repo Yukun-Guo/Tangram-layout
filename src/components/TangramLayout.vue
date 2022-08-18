@@ -8,6 +8,7 @@ import {
   VNode,
   shallowRef,
   computed,
+  Ref,
 } from "vue";
 import {
   TreeNode,
@@ -20,6 +21,7 @@ import {
 
 import Pane from "./Pane.vue";
 import Splitter from "./Splitter.vue";
+import GetStarted from "./GetStarted.vue";
 
 export default defineComponent({
   name: "TangramLayout",
@@ -51,10 +53,10 @@ export default defineComponent({
       relativePosition: 1,
     });
     let themeColor = computed(() => {
-      let leaf = {};
-      let split = {};
-      let drag = {};
-      let pane = {};
+      let leaf: { bgColor: any; color: any } = { bgColor: "white", color: "black" };
+      let split: { bgColor: any } = { bgColor: "white" };
+      let drag: { bgColor: any; color: any } = { bgColor: "white", color: "black" };
+      let pane: { bgColor: any; color: any } = { bgColor: "white", color: "black" };
       // let treeRoot = {};
       switch (props.theme) {
         case "dark":
@@ -89,7 +91,8 @@ export default defineComponent({
     });
     pluginComponents.value.set(
       "GetStarted",
-      defineAsyncComponent(() => import("./GetStarted.vue"))
+      GetStarted
+      //defineAsyncComponent(() => import("./GetStarted.vue"))
     );
 
     const previewRef = ref() as Ref<HTMLElement>; //dragging preview
@@ -122,7 +125,11 @@ export default defineComponent({
       };
     };
 
-    let getTargetPosInfo = (event: MouseEvent, targetRect: DOMRect, gap: number) => {
+    let getTargetPosInfo = (
+      event: MouseEvent,
+      targetRect: DOMRect,
+      gap: number = 0.3
+    ) => {
       let layout = null;
       let relativePosition = null;
       let pIdx = -1;
@@ -175,7 +182,7 @@ export default defineComponent({
       return { layout, relativePosition, pIdx };
     };
 
-    let moveDragPane = (event: MouseEvent) => {
+    let moveDragPane = (event: MouseEvent = null) => {
       if (!event) {
         dragRef.value.style.display = "none";
         return;
@@ -185,7 +192,11 @@ export default defineComponent({
       dragRef.value.style.left = event.clientX - 25 + "px";
     };
 
-    let previewPane = (event: MouseEvent, targetRect: DOMRect, pIdx: number) => {
+    let previewPane = (
+      event: MouseEvent = null,
+      targetRect: DOMRect = undefined,
+      pIdx: number = 0
+    ) => {
       if (!event || pIdx === -1 || !targetRect) {
         previewRef.value.style.display = "none";
         return;
@@ -231,13 +242,12 @@ export default defineComponent({
 
     let onViewDragStart = (event: MouseEvent) => {
       if (event.button !== 0) return;
-
-      const nodeIdAttr = event.target.hasAttribute("nodeId");
-      const dragAttr = event.target.hasAttribute("pane-drag");
+      const target = event.target as HTMLElement;
+      const nodeIdAttr = target.hasAttribute("nodeId");
+      const dragAttr = target.hasAttribute("pane-drag");
       if (!nodeIdAttr && !dragAttr) return;
 
-      var el = event.target;
-      const nodeId = el.getAttribute("nodeId");
+      const nodeId = target.getAttribute("nodeId");
       dragMoveState.dragMoveNodeID = nodeId;
       dragMoveState.dragTargetNodeID = nodeId;
       dragMoveState.dragMoveNodeName = rLayout[nodeId].name;
@@ -264,7 +274,7 @@ export default defineComponent({
       for (
         ;
         viewDom && viewDom.matches && !viewDom.matches(".view");
-        viewDom = viewDom.parentNode
+        viewDom = viewDom.parentNode as Element
       ) {}
       let targetDomRect = null;
       dragMoveState.dragTargetNodeID = null;
@@ -279,15 +289,15 @@ export default defineComponent({
       if (dragMoveState.dragMoveNodeID !== dragMoveState.dragTargetNodeID) {
         previewPane(event, targetDomRect, tarPosInfo.pIdx);
       } else {
-        previewPane(0);
+        previewPane();
       }
       moveDragPane(event);
     };
 
     let onViewDrop = (event: MouseEvent) => {
       if (event.button !== 0) return;
-      previewPane(0);
-      moveDragPane(0);
+      previewPane();
+      moveDragPane();
       // console.log(dragMoveState);
       if (
         dragMoveState.dragMoveNodeID !== dragMoveState.dragTargetNodeID &&

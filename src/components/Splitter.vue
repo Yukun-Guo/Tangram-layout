@@ -48,7 +48,7 @@ export default defineComponent({
         // calculate resized proportion
         var elRect = el.value.getBoundingClientRect();
         var leftChildRect = { left: 0, top: 0, width: 100, height: 100 };
-        var rightChildRect = { width: 100, height: 100 };
+        var rightChildRect = { right: 0, bottom: 0, width: 100, height: 100 };
         el.value.parentElement.childNodes.forEach((element: any) => {
           if (element.id === props.leftChildId) {
             leftChildRect = element.getBoundingClientRect();

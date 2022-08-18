@@ -1,12 +1,12 @@
 interface TreeNode {
     ID: string
-    layout: 'horizontal' | 'vertical'
+    layout: string | 'horizontal' | 'vertical'
     name?: string
     isVisible?: boolean
     displayGroup?: number
     isActive?: boolean
     resizable?: boolean
-    relativePosition?: 0 | 1 // relative position of the twin node, used for adjust window position layout
+    relativePosition?: number | 0 | 1 // relative position of the twin node, used for adjust window position layout
     proportion?: number
     parentID?: string
     twinID?: string
