@@ -4,7 +4,7 @@
 import { ref } from "vue";
 import TangramLayout from "./components/TangramLayout.vue";
 import { createTree, TreeNode, insertChild, removeChild } from "./utils/tree";
-import pluginConfigs from "./plugins/plugin.config.json";
+import pluginConfigs from "./plugins/tangram.plugin.config.json";
 let layout_tree = createTree();
 
 let node1: TreeNode = {
