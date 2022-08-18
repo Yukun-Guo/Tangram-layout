@@ -9,9 +9,10 @@ import {
   insertChild,
   removeChild,
 } from "./components/tangram-layout";
-
+// import plugins
 import pluginConfigs from "./components/plugins/tangram.plugin.config.json";
 
+// create tree for tangram layout
 let layout_tree = createTree();
 
 let node1: TreeNode = {
@@ -59,6 +60,7 @@ let showControls = ref(true);
 let showHeader = ref(true);
 let theme: any = ref("dark");
 let themeID = ref(1);
+
 let changeTheme = () => {
   themeID.value++;
   themeID.value = themeID.value % 3;
