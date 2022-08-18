@@ -56,13 +56,22 @@ insertChild(layout_tree, node4);
 let showControls = ref(true);
 let showHeader = ref(true);
 let theme = ref("dark");
+let themeID = ref(1);
 let changeTheme = () => {
-  switch (theme.value) {
-    case "dark":
+  themeID.value++;
+  themeID.value = themeID.value % 3;
+  switch (themeID.value) {
+    case 1:
+      theme.value = "dark";
+      break;
+    case 2:
       theme.value = "light";
       break;
     default:
-      theme.value = "dark";
+      theme.value = {
+        split: { bgColor: "black" },
+        pane: { headerBgColor: "black", bodyBgColor: "gray", color: "yellow" },
+      };
   }
 };
 </script>
@@ -70,7 +79,7 @@ let changeTheme = () => {
 <template>
   <button @click="showHeader = !showHeader">showHeader ({{ showHeader }})</button>
   <button @click="showControls = !showControls">showControls ({{ showControls }})</button>
-  <button @click="changeTheme">Change Theme ({{ theme }})</button>
+  <button @click="changeTheme">Change Theme ({{ themeID }})</button>
   <TangramLayout
     :layout="layout_tree"
     :plugins="pluginConfigs"

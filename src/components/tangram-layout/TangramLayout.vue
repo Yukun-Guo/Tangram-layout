@@ -53,32 +53,42 @@ export default defineComponent({
       relativePosition: 1,
     });
     let themeColor = computed(() => {
-      let leaf: { bgColor: any; color: any } = { bgColor: "white", color: "black" };
       let split: { bgColor: any } = { bgColor: "white" };
-      let drag: { bgColor: any; color: any } = { bgColor: "white", color: "black" };
-      let pane: { bgColor: any; color: any } = { bgColor: "white", color: "black" };
+      let pane: { headerBgColor: any; bodyBgColor: any; color: any } = {
+        headerBgColor: "white",
+        bodyBgColor: "white",
+        color: "black",
+      };
       // let treeRoot = {};
-      switch (props.theme) {
-        case "dark":
-          leaf.bgColor = "#1e1e1e";
-          leaf.color = "#c4c4c4";
+      if (typeof props.theme === "string") {
+        switch (props.theme) {
+          case "dark":
+            // paneHeader.bgColor = "#1e1e1e";
+            // paneHeader.color = "#c4c4c4";
 
-          split.bgColor = "#2d2d2d";
+            split.bgColor = "#1e1e1e";
 
-          pane.bgColor = "#2d2d2d";
-          pane.color = "#c4c4c4";
-          break;
-        default:
-          // "light":
-          leaf.bgColor = "#fefefe";
-          leaf.color = "#2d2d2d";
+            pane.headerBgColor = "#1e1e1e";
+            pane.bodyBgColor = "#2d2d2d";
+            pane.color = "#c4c4c4";
+            break;
+          default:
+            // "light":
+            // paneHeader.bgColor = "#fefefe";
+            // paneHeader.color = "#2d2d2d";
 
-          split.bgColor = "#ececec";
+            split.bgColor = "#fefefe";
 
-          pane.bgColor = "#ececec";
-          pane.color = "#2d2d2d";
+            pane.headerBgColor = "#fefefe";
+            pane.bodyBgColor = "#ececec";
+            pane.color = "#2d2d2d";
+        }
+      } else {
+        split = props.theme.split;
+        pane = props.theme.pane;
       }
-      return { leaf, split, drag, pane };
+
+      return { split, pane };
     });
 
     //Dynamically load components
@@ -110,15 +120,15 @@ export default defineComponent({
       };
     };
 
-    let leafProps = (node: TreeNode) => {
+    let paneProps = (node: TreeNode) => {
       return {
         id: node.ID,
         nodeId: node.ID,
         class: "leaf view",
         targetView: "view-" + node.ID,
         style: {
-          "background-color": themeColor.value.leaf.bgColor,
-          color: themeColor.value.leaf.color,
+          // "background-color": themeColor.value.pane.bodyBgColor,
+          // color: themeColor.value.pane.color,
           "flex-basis": `${node.proportion}%`,
         },
         onmousedown: node.ID !== "treeRoot" ? onViewDragStart : "",
@@ -384,7 +394,7 @@ export default defineComponent({
       } else {
         // create a new leaf node
         // console.log(pluginComponents.value);
-        split = h("div", leafProps(Node), [
+        split = h("div", paneProps(Node), [
           Node.ID !== "treeRoot"
             ? h(
                 Pane,
@@ -425,8 +435,8 @@ export default defineComponent({
             style: {
               height: "20",
               overflow: "hidden",
-              color: themeColor.value.leaf.color,
-              backgroundColor: themeColor.value.leaf.bgColor,
+              color: themeColor.value.pane.color,
+              backgroundColor: themeColor.value.pane.headerBgColor,
               opacity: "0.5",
             },
           },

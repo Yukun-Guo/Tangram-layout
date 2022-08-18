@@ -4,7 +4,7 @@
       class="header"
       :style="{
         color: theme.color,
-        backgroundColor: theme.bgColor,
+        backgroundColor: theme.headerBgColor,
         display: showControls ? 'flex' : 'block',
       }"
       v-if="showHeader"
@@ -15,7 +15,7 @@
           <span>+</span>
           <div
             class="dropdown-content"
-            :style="{ color: theme.color, backgroundColor: theme.bgColor }"
+            :style="{ color: theme.color, backgroundColor: theme.headerBgColor }"
           >
             <div
               v-for="item in Object.keys(plugins)"
@@ -31,7 +31,10 @@
       <span class="title">{{ title }}</span>
     </div>
 
-    <div class="content" :style="{ top: showHeader ? '1.6em' : '0em' }">
+    <div
+      class="content"
+      :style="{ top: showHeader ? '1.6em' : '0em', backgroundColor: theme.bodyBgColor }"
+    >
       <slot />
     </div>
   </div>
@@ -47,8 +50,9 @@ export default {
     theme: {
       type: Object,
       default: {
-        bgColor: "#2d2d2d",
-        color: "#2d2d2d",
+        headerBgColor: "#1e1e1e",
+        bodyBgColor: "#2d2d2d",
+        color: "#c4c4c4",
       },
     },
     showControls: { type: Boolean, default: true },
