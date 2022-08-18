@@ -17,7 +17,7 @@ import {
   removeChild,
   insertChild,
   moveChild,
-} from "../utils/tree";
+} from "./tree";
 
 import Pane from "./Pane.vue";
 import Splitter from "./Splitter.vue";

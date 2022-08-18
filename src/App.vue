@@ -2,9 +2,14 @@
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import { ref } from "vue";
-import TangramLayout from "./components/TangramLayout.vue";
-import { createTree, TreeNode, insertChild, removeChild } from "./utils/tree";
-import pluginConfigs from "./plugins/tangram.plugin.config.json";
+import TangramLayout from "./components/tangram-layout/TangramLayout.vue";
+import {
+  createTree,
+  TreeNode,
+  insertChild,
+  removeChild,
+} from "./components/tangram-layout/Tree";
+import pluginConfigs from "./components/plugins/tangram.plugin.config.json";
 let layout_tree = createTree();
 
 let node1: TreeNode = {
