@@ -33,6 +33,7 @@ export default defineComponent({
       default: {},
     },
     theme: {
+      type: Object,
       default: "dark",
     },
     showHeader: {
@@ -63,22 +64,14 @@ export default defineComponent({
       if (typeof props.theme === "string") {
         switch (props.theme) {
           case "dark":
-            // paneHeader.bgColor = "#1e1e1e";
-            // paneHeader.color = "#c4c4c4";
-
             split.bgColor = "#1e1e1e";
-
             pane.headerBgColor = "#1e1e1e";
             pane.bodyBgColor = "#2d2d2d";
             pane.color = "#c4c4c4";
             break;
           default:
             // "light":
-            // paneHeader.bgColor = "#fefefe";
-            // paneHeader.color = "#2d2d2d";
-
             split.bgColor = "#fefefe";
-
             pane.headerBgColor = "#fefefe";
             pane.bodyBgColor = "#ececec";
             pane.color = "#2d2d2d";
