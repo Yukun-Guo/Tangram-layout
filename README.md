@@ -7,7 +7,7 @@
 ### 1. clone this repository
 
     ```bash 
-    git clone https://github.com/Yukun-Guo/Tangram
+    git clone https://github.com/Yukun-Guo/Tangram-layout
     ```
 
 ### 2. install dependencies
