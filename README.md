@@ -1,6 +1,6 @@
-# Tangram, A Vue3 split & drag layout
+# Tangram-layout, A Vue3 split & drag layout
 
-![Tangram](public/Animation.gif)
+![Tangram-layout](public/Animation.gif)
 
 ## Get started
 
