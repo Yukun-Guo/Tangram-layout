@@ -24,7 +24,7 @@
 
 ## use `Tangram-layout` in your project
 
-### 1. Copy the src/components/`tangram-layout` folder to your project, create `plugins` folder in your project. these two folders must be in the same level
+### 1. Copy the src/components/`tangram-layout` folder to your project, and create `plugins` folder. These two folders must be in the same level
 
 ### 2. Put the components you want to show in the `plugins` folder, and create a `tangram.plugin.config.json` file to register the components. Each component must store in a folder
 
