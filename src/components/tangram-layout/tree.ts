@@ -2,17 +2,17 @@ interface TreeNode {
     ID: string
     layout: string | 'horizontal' | 'vertical'
     name?: string
-    isVisible?: boolean
-    displayGroup?: number
-    isActive?: boolean
-    resizable?: boolean
-    relativePosition?: number | 0 | 1 // relative position of the twin node, used for adjust window position layout
-    proportion?: number
+    isVisible?: boolean // always true
+    displayGroup?: number // preserved for future use
+    isActive?: boolean // always true
+    resizable?: boolean // always true
+    relativePosition?: number | 0 | 1 // relative position of the twin node, used for adjust pane position
+    proportion?: number // the proportion of current node in the parent node (0-100)
     parentID?: string
-    twinID?: string
+    twinID?: string  // the twin node ID used for specify pane position
     children?: string[]
-    minSize?: number
-    vNode?: any,
+    minSize?: number // the minimum size of the pane (px)
+    vNode?: any, // the vue node for the pane content
 }
 
 interface Stump {

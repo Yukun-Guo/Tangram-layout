@@ -12,7 +12,7 @@ export default defineComponent({
   setup() {
     let msg = "Hello World!";
     let showMsg = () => {
-      console.log(msg);
+      alert(msg);
     };
     return { msg, showMsg };
   },
