@@ -46,102 +46,102 @@ An example of `tangram.plugin.config.json`:
 
 ### 3. A full example
 
-```js
-<script setup lang="ts">
+```typescript
+    <script setup lang="ts">
 
-import { ref } from "vue";
-import {
-  TangramLayout,
-  createTree,
-  TreeNode,
-  insertChild,
-  removeChild,
-} from "./components/tangram-layout";
-// import plugins
-import pluginConfigs from "./components/plugins/tangram.plugin.config.json";
+    import { ref } from "vue";
+    import {
+    TangramLayout,
+    createTree,
+    TreeNode,
+    insertChild,
+    removeChild,
+    } from "./components/tangram-layout";
+    // import plugins
+    import pluginConfigs from "./components/plugins/tangram.plugin.config.json";
 
-// create tree for tangram layout
-let layout_tree = createTree();
+    // create tree for tangram layout
+    let layout_tree = createTree();
 
-let node1: TreeNode = {
-  ID: "1",
-  name: "Pane 1", // title of the pane
-  layout: "horizontal", // layout of the pane (horizontal or vertical)
-  relativePosition: 1, // relative position of the pane (1: left/top, 2: right/bottom)
-  twinID: undefined, // twinID of the pane (if the pane is split, it will have a twin)
-  minSize: 0, //pixels
-  vNode: "Hello", // name of the component
-};
-let node2: TreeNode = {
-  ID: "2",
-  name: "Pane 2",
-  layout: "horizontal",
-  relativePosition: 1,
-  twinID: node1.ID,
-  minSize: 0,
-  vNode: "Hello",
-};
-let node3: TreeNode = {
-  ID: "3",
-  name: "Pane3",
-  layout: "horizontal",
-  relativePosition: 1,
-  twinID: node2.ID,
-  minSize: 0,
-  vNode: "Hello2",
-};
-let node4: TreeNode = {
-  ID: "4",
-  name: "Pane 4",
-  layout: "vertical",
-  relativePosition: 1,
-  twinID: node2.ID,
-  minSize: 0,
-  vNode: "Hello",
-};
-insertChild(layout_tree, node1); 
-insertChild(layout_tree, node2); 
-insertChild(layout_tree, node3);
-insertChild(layout_tree, node4);
+    let node1: TreeNode = {
+    ID: "1",
+    name: "Pane 1", // title of the pane
+    layout: "horizontal", // layout of the pane (horizontal or vertical)
+    relativePosition: 1, // relative position of the pane (1: left/top, 2: right/bottom)
+    twinID: undefined, // twinID of the pane (if the pane is split, it will have a twin)
+    minSize: 0, //pixels
+    vNode: "Hello", // name of the component
+    };
+    let node2: TreeNode = {
+    ID: "2",
+    name: "Pane 2",
+    layout: "horizontal",
+    relativePosition: 1,
+    twinID: node1.ID,
+    minSize: 0,
+    vNode: "Hello",
+    };
+    let node3: TreeNode = {
+    ID: "3",
+    name: "Pane3",
+    layout: "horizontal",
+    relativePosition: 1,
+    twinID: node2.ID,
+    minSize: 0,
+    vNode: "Hello2",
+    };
+    let node4: TreeNode = {
+    ID: "4",
+    name: "Pane 4",
+    layout: "vertical",
+    relativePosition: 1,
+    twinID: node2.ID,
+    minSize: 0,
+    vNode: "Hello",
+    };
+    insertChild(layout_tree, node1); 
+    insertChild(layout_tree, node2); 
+    insertChild(layout_tree, node3);
+    insertChild(layout_tree, node4);
 
-let showControls = ref(true);
-let showHeader = ref(true);
-let theme: any = ref("dark");
-let themeID = ref(1);
+    let showControls = ref(true);
+    let showHeader = ref(true);
+    let theme: any = ref("dark");
+    let themeID = ref(1);
 
-let changeTheme = () => {
-  themeID.value++;
-  themeID.value = themeID.value % 3;
-  switch (themeID.value) {
-    case 1:
-      theme.value = "dark"; //built-in theme dark
-      break;
-    case 2:
-      theme.value = "light"; //built-in theme light
-      break;
-    default:
-      theme.value = { //custom theme
-        split: { bgColor: "black" },
-        pane: { headerBgColor: "black", bodyBgColor: "gray", color: "yellow" },
-      };
-  }
-};
-</script>
+    let changeTheme = () => {
+    themeID.value++;
+    themeID.value = themeID.value % 3;
+    switch (themeID.value) {
+        case 1:
+        theme.value = "dark"; //built-in theme dark
+        break;
+        case 2:
+        theme.value = "light"; //built-in theme light
+        break;
+        default:
+        theme.value = { //custom theme
+            split: { bgColor: "black" },
+            pane: { headerBgColor: "black", bodyBgColor: "gray", color: "yellow" },
+        };
+    }
+    };
+    </script>
 
-<template>
-  <button @click="showHeader = !showHeader">showHeader ({{ showHeader }})</button>
-  <button @click="showControls = !showControls">showControls ({{ showControls }})</button>
-  <button @click="changeTheme">Change Theme ({{ themeID }})</button>
-  <TangramLayout
-    :layout="layout_tree" // tree of the layout
-    :plugins="pluginConfigs" // plugin configs
-    :theme="theme" // theme
-    :showHeader="showHeader" // show header of the pane
-    :showControls="showControls" // show controls of the pane
-  />
-</template>
+    <template>
+    <button @click="showHeader = !showHeader">showHeader ({{ showHeader }})</button>
+    <button @click="showControls = !showControls">showControls ({{ showControls }})</button>
+    <button @click="changeTheme">Change Theme ({{ themeID }})</button>
+    <TangramLayout
+        :layout="layout_tree" // tree of the layout
+        :plugins="pluginConfigs" // plugin configs
+        :theme="theme" // theme
+        :showHeader="showHeader" // show header of the pane
+        :showControls="showControls" // show controls of the pane
+    />
+    </template>
 
-<style>
-...
-</style>
+    <style>
+    ...
+    </style>
 ```
