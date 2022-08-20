@@ -30,6 +30,7 @@ export default defineComponent({
       default: createTree(),
     },
     pluginComponents: {
+      type: Object,
       default: {},
     },
     theme: {

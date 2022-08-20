@@ -100,6 +100,7 @@ export default {
   width: 100%;
   flex-direction: column;
   pointer-events: none;
+  line-height: initial;
 }
 
 .pane > .header {
