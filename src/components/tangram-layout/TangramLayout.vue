@@ -29,7 +29,7 @@ export default defineComponent({
     layout: {
       default: createTree(),
     },
-    plugins: {
+    pluginComponents: {
       default: {},
     },
     theme: {
@@ -85,18 +85,14 @@ export default defineComponent({
     });
 
     //Dynamically load components
-    const pluginComponents = shallowRef(new Map<String, any>());
-    Object.keys(props.plugins).forEach((element) => {
-      pluginComponents.value.set(
-        element,
-        defineAsyncComponent(() => import(`../plugins/${props.plugins[element].dir}`))
-      );
-    });
-    pluginComponents.value.set(
-      "GetStarted",
-      GetStarted
-      //defineAsyncComponent(() => import("./GetStarted.vue"))
-    );
+    // const pluginComponents = shallowRef(new Map<String, any>());
+    // Object.keys(props.plugins).forEach((element) => {
+    //   pluginComponents.value.set(
+    //     element,
+    //     defineAsyncComponent(() => import(`../plugins/${props.plugins[element].dir}`))
+    //   );
+    // });
+    // pluginComponents.value.set("GetStarted", GetStarted);
 
     const previewRef = ref() as Ref<HTMLElement>; //dragging preview
     const dragRef = ref() as Ref<HTMLElement>; //dragging node thumbnail
@@ -346,7 +342,7 @@ export default defineComponent({
           layout: "horizontal",
           relativePosition: 0,
           twinID: undefined,
-          vNode: "GetStarted",
+          vNode: GetStarted,
         };
       } else {
         newNode = {
@@ -386,7 +382,6 @@ export default defineComponent({
         split = h("div", splitProps(Node), subSplit);
       } else {
         // create a new leaf node
-        // console.log(pluginComponents.value);
         split = h("div", paneProps(Node), [
           Node.ID !== "treeRoot"
             ? h(
@@ -396,12 +391,19 @@ export default defineComponent({
                   onAddNode,
                   title: Node.name,
                   nodeId: Node.ID,
-                  plugins: props.plugins,
+                  plugins: props.pluginComponents,
                   theme: themeColor.value.pane,
                   showHeader: props.showHeader,
                   showControls: props.showControls,
                 },
-                () => h(pluginComponents.value.get(Node.vNode), {}, () => [])
+                () =>
+                  h(
+                    typeof Node.vNode === "string"
+                      ? props.pluginComponents.get(Node.vNode).component
+                      : Node.vNode,
+                    {},
+                    () => []
+                  )
               )
             : h(
                 "div",

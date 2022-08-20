@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import { ref } from "vue";
+import { ref, shallowRef, defineAsyncComponent } from "vue";
 import {
   TangramLayout,
   createTree,
@@ -9,6 +9,7 @@ import {
   insertChild,
   removeChild,
 } from "./components/tangram-layout";
+import { PluginObject } from "./components/tangram-layout/utils";
 // import plugins
 import pluginConfigs from "./components/plugins/tangram.plugin.config.json";
 
@@ -78,6 +79,25 @@ let changeTheme = () => {
       };
   }
 };
+
+const importPluginComponents = (pluginsDir: String, pluginConfigs: any) => {
+  let pluginComponents = shallowRef(new Map<String, PluginObject>());
+  Object.keys(pluginConfigs).forEach((element) => {
+    pluginComponents.value.set(element, {
+      name: element,
+      component: defineAsyncComponent(
+        () => import(/* @vite-ignore */ `${pluginsDir}/${pluginConfigs[element].dir}`)
+      ),
+      dir: pluginConfigs[element].dir,
+      description: pluginConfigs[element].description,
+      version: pluginConfigs[element].version,
+      author: pluginConfigs[element].author,
+      icon: pluginConfigs[element].icon,
+    });
+  });
+  return pluginComponents;
+};
+let plugins = importPluginComponents("./components/plugins", pluginConfigs);
 </script>
 
 <template>
@@ -86,7 +106,7 @@ let changeTheme = () => {
   <button @click="changeTheme">Change Theme ({{ themeID }})</button>
   <TangramLayout
     :layout="layout_tree"
-    :plugins="pluginConfigs"
+    :pluginComponents="plugins"
     :theme="theme"
     :showHeader="showHeader"
     :showControls="showControls"

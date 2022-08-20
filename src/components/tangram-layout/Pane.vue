@@ -18,8 +18,8 @@
             :style="{ color: theme.color, backgroundColor: theme.headerBgColor }"
           >
             <div
-              v-for="item in Object.keys(plugins)"
-              :key="item"
+              v-for="item in plugins.keys()"
+              :key="plugins.get(item).name"
               :title="setTitle(item)"
               @click="addNode(item)"
             >
@@ -60,8 +60,12 @@ export default {
   },
   setup(props, context) {
     let showDropDown = ref(1);
+    // console.log("props.plugins", props.plugins.get("Hello"));
+
     let setTitle = (item) => {
-      return `path: plugins/${props.plugins[item].dir}\nDescription: ${props.plugins[item].description}`;
+      return `Description: ${props.plugins.get(item).description}\nAuthor: ${
+        props.plugins.get(item).author
+      }\nVersion: ${props.plugins.get(item).version}`;
     };
     let removeNode = () => {
       context.emit("removeNode", props.nodeId);

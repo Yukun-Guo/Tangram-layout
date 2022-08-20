@@ -1,14 +1,23 @@
 {
     "Hello": {
         "dir": "HelloWorld/HelloWorld.vue",
-        "description": "This is a test component Hello World"
+        "description": "This is a test component Hello World",
+        "icon": " ",
+        "version": "0.0.1",
+        "author": "Yukun Guo <guoyukn@gmail.com>"
     },
     "Hello2": {
         "dir": "HelloWorld2/HelloWorld2.vue",
-        "description": "This is a test component Hello World2"
+        "description": "This is a test component Hello World2",
+        "icon": " ",
+        "version": "0.0.1",
+        "author": "Yukun Guo <guoyukn@gmail.com>"
     },
     "Hello3": {
         "dir": "HelloWorld3/HelloWorld3.vue",
-        "description": "This is a test component Hello World3"
+        "description": "This is a test component Hello World3",
+        "icon": " ",
+        "version": "0.0.1",
+        "author": "Yukun Guo <guoyukn@gmail.com>"
     }
 }
