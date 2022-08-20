@@ -48,8 +48,9 @@ An example of `tangram.plugin.config.json`:
 
 ```typescript
     <script setup lang="ts">
-
-    import { ref } from "vue";
+    // This starter template is using Vue 3 <script setup> SFCs
+    // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
+    import { ref, shallowRef, defineAsyncComponent } from "vue";
     import {
     TangramLayout,
     createTree,
@@ -57,6 +58,7 @@ An example of `tangram.plugin.config.json`:
     insertChild,
     removeChild,
     } from "./components/tangram-layout";
+    import { PluginObject } from "./components/tangram-layout/utils";
     // import plugins
     import pluginConfigs from "./components/plugins/tangram.plugin.config.json";
 
@@ -99,8 +101,8 @@ An example of `tangram.plugin.config.json`:
     minSize: 0,
     vNode: "Hello",
     };
-    insertChild(layout_tree, node1); 
-    insertChild(layout_tree, node2); 
+    insertChild(layout_tree, node1);
+    insertChild(layout_tree, node2);
     insertChild(layout_tree, node3);
     insertChild(layout_tree, node4);
 
@@ -120,12 +122,33 @@ An example of `tangram.plugin.config.json`:
         theme.value = "light"; //built-in theme light
         break;
         default:
-        theme.value = { //custom theme
+        theme.value = {
+            //custom theme
             split: { bgColor: "black" },
             pane: { headerBgColor: "black", bodyBgColor: "gray", color: "yellow" },
         };
     }
     };
+
+    // async register plugins
+    const importPluginComponents = (pluginsDir: String, pluginConfigs: any) => {
+        let pluginComponents = shallowRef(new Map<String, PluginObject>());
+        Object.keys(pluginConfigs).forEach((element) => {
+            pluginComponents.value.set(element, {
+            name: element,
+            component: defineAsyncComponent(
+                () => import(/* @vite-ignore */ `${pluginsDir}/${pluginConfigs[element].dir}`)
+            ),
+            dir: pluginConfigs[element].dir,
+            description: pluginConfigs[element].description,
+            version: pluginConfigs[element].version,
+            author: pluginConfigs[element].author,
+            icon: pluginConfigs[element].icon,
+            });
+        });
+        return pluginComponents;
+    };
+    let plugins = importPluginComponents("./components/plugins", pluginConfigs);
     </script>
 
     <template>
@@ -133,14 +156,13 @@ An example of `tangram.plugin.config.json`:
     <button @click="showControls = !showControls">showControls ({{ showControls }})</button>
     <button @click="changeTheme">Change Theme ({{ themeID }})</button>
     <TangramLayout
-        :layout="layout_tree" // tree of the layout
-        :plugins="pluginConfigs" // plugin configs
-        :theme="theme" // theme
-        :showHeader="showHeader" // show header of the pane
-        :showControls="showControls" // show controls of the pane
+        :layout="layout_tree"
+        :pluginComponents="plugins"
+        :theme="theme"
+        :showHeader="showHeader"
+        :showControls="showControls"
     />
     </template>
-
     <style>
     ...
     </style>

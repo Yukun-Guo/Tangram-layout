@@ -18,12 +18,12 @@ let layout_tree = createTree();
 
 let node1: TreeNode = {
   ID: "1",
-  name: "Pane 1",
-  layout: "horizontal",
-  relativePosition: 1,
-  twinID: undefined,
+  name: "Pane 1", // title of the pane
+  layout: "horizontal", // layout of the pane (horizontal or vertical)
+  relativePosition: 1, // relative position of the pane (1: left/top, 2: right/bottom)
+  twinID: undefined, // twinID of the pane (if the pane is split, it will have a twin)
   minSize: 0, //pixels
-  vNode: "Hello",
+  vNode: "Hello", // name of the component
 };
 let node2: TreeNode = {
   ID: "2",
@@ -67,19 +67,20 @@ let changeTheme = () => {
   themeID.value = themeID.value % 3;
   switch (themeID.value) {
     case 1:
-      theme.value = "dark";
+      theme.value = "dark"; //built-in theme dark
       break;
     case 2:
-      theme.value = "light";
+      theme.value = "light"; //built-in theme light
       break;
     default:
       theme.value = {
+        //custom theme
         split: { bgColor: "black" },
         pane: { headerBgColor: "black", bodyBgColor: "gray", color: "yellow" },
       };
   }
 };
-
+// async register plugins
 const importPluginComponents = (pluginsDir: String, pluginConfigs: any) => {
   let pluginComponents = shallowRef(new Map<String, PluginObject>());
   Object.keys(pluginConfigs).forEach((element) => {
