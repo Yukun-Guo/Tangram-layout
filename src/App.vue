@@ -7,9 +7,8 @@ import {
   createTree,
   TreeNode,
   insertChild,
-  removeChild,
+  PluginObject,
 } from "./components/tangram-layout";
-import { PluginObject } from "./components/tangram-layout/utils";
 // import plugins
 import pluginConfigs from "./components/plugins/tangram.plugin.config.json";
 

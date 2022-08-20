@@ -8,6 +8,6 @@ import {
     uuid,
     getTreeSize,
 } from "./Tree";
-
-export type { TreeNode, Stump }
+import { PluginObject } from "./utils";
+export type { TreeNode, Stump, PluginObject }
 export { TangramLayout, getTreeSize, uuid, createTree, insertChild, removeChild };
