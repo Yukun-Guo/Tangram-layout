@@ -114,7 +114,7 @@ export default defineComponent({
   },
 });
 </script>
-<style scoped>
+<style>
 .split {
   display: flex;
   flex: 1;
