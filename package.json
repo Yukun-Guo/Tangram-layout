@@ -1,7 +1,17 @@
 {
-  "name": "tangram",
-  "private": true,
-  "version": "0.0.0",
+  "name": "tangram-layout",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/tangram-layout.umd.js",
+  "module": "./dist/tangram-layout.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/tangram-layout.es.js",
+      "require": "./dist/tangram-layout.umd.js"
+    }
+  },
+  "version": "0.0.1",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
