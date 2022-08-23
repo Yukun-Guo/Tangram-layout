@@ -1,5 +1,11 @@
 {
   "name": "tangram-layout",
+  "version": "0.0.9",
+  "description": "A Vue3 based UI layout engine. Features draggable and resizable. Custom plugin support and variable themes.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build"
+  },
   "files": [
     "dist"
   ],
@@ -11,11 +17,25 @@
       "require": "./dist/tangram-layout.umd.js"
     }
   },
-  "version": "0.0.1",
-  "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
-    "preview": "vite preview"
+  "keywords": [
+    "vue",
+    "vuejs",
+    "vue3",
+    "layout",
+    "splitter",
+    "split",
+    "draggable",
+    "dragging"
+  ],
+  "homepage": "https://github.com/Yukun-Guo/Tangram-layout",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yukun-Guo/Tangram-layout.git"
+  },
+  "license": "MIT",
+  "author": "Yukun Guo",
+  "bugs": {
+    "url": "https://github.com/Yukun-Guo/Tangram-layout/issues"
   },
   "dependencies": {
     "vue": "^3.2.25"

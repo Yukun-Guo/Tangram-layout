@@ -9,6 +9,11 @@ import {
   insertChild,
   PluginObject,
 } from "./components/tangram-layout";
+
+import HelloWorld from "./components/plugins/HelloWorld/HelloWorld.vue";
+import HelloWorld2 from "./components/plugins/HelloWorld2/HelloWorld2.vue";
+import HelloWorld3 from "./components/plugins/HelloWorld3/HelloWorld3.vue";
+
 // import plugins
 import pluginConfigs from "./components/plugins/tangram.plugin.config.json";
 
@@ -22,7 +27,7 @@ let node1: TreeNode = {
   relativePosition: 1, // relative position of the pane (1: left/top, 2: right/bottom)
   twinID: undefined, // twinID of the pane (if the pane is split, it will have a twin)
   minSize: 0, //pixels
-  vNode: "Hello", // name of the component
+  vNode: "Hello", //the component instance or the name of the component
 };
 let node2: TreeNode = {
   ID: "2",
@@ -79,25 +84,49 @@ let changeTheme = () => {
       };
   }
 };
-// async register plugins
-const importPluginComponents = (pluginsDir: String, pluginConfigs: any) => {
-  let pluginComponents = shallowRef(new Map<String, PluginObject>());
-  Object.keys(pluginConfigs).forEach((element) => {
-    pluginComponents.value.set(element, {
-      name: element,
-      component: defineAsyncComponent(
-        () => import(/* @vite-ignore */ `${pluginsDir}/${pluginConfigs[element].dir}`)
-      ),
-      dir: pluginConfigs[element].dir,
-      description: pluginConfigs[element].description,
-      version: pluginConfigs[element].version,
-      author: pluginConfigs[element].author,
-      icon: pluginConfigs[element].icon,
-    });
-  });
-  return pluginComponents;
-};
-let plugins = importPluginComponents("./components/plugins", pluginConfigs);
+// // async register plugins
+// const importPluginComponents = (pluginsDir: String, pluginConfigs: any) => {
+//   let pluginComponents = shallowRef(new Map<String, PluginObject>());
+//   Object.keys(pluginConfigs).forEach((element) => {
+//     pluginComponents.value.set(element, {
+//       name: element,
+//       component: defineAsyncComponent(
+//         () => import(/* @vite-ignore */ `${pluginsDir}/${pluginConfigs[element].dir}`)
+//       ),
+//       description: pluginConfigs[element].description,
+//       version: pluginConfigs[element].version,
+//       author: pluginConfigs[element].author,
+//       icon: pluginConfigs[element].icon,
+//     });
+//   });
+//   return pluginComponents;
+// };
+// let plugins = importPluginComponents("./components/plugins", pluginConfigs);
+
+// register plugins
+let plugins = shallowRef(new Map<String, PluginObject>());
+plugins.value.set("Hello", {
+  name: "Hello",
+  component: HelloWorld,
+  description: "...",
+  version: "xxx",
+  author: "...",
+});
+plugins.value.set("Hello2", {
+  name: "Hello2",
+  component: HelloWorld2,
+  description: "...",
+  version: "xxx",
+  author: "...",
+});
+plugins.value.set("Hello3", {
+  name: "Hello3",
+  // async import component
+  component: HelloWorld3,
+  description: "...",
+  version: "xxx",
+  author: "...",
+});
 </script>
 
 <template>
@@ -120,7 +149,6 @@ let plugins = importPluginComponents("./components/plugins", pluginConfigs);
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  /* margin-top: 20px; */
   height: 100%;
   user-select: none; /* standard syntax */
   -webkit-user-select: none; /* webkit (safari, chrome) browsers */

@@ -32,17 +32,14 @@ export default defineComponent({
   },
   setup(props, context) {
     const { trapRef } = useFocusTrap();
-    let newPaneName = ref("");
     const inputRef = ref(null);
-    newPaneName.value = props.paneName;
-    console.log("PaneName setup ", props.paneName);
     let close = () => {
       context.emit("close", inputRef.value.value);
     };
     let cancel = () => {
       context.emit("close", null);
     };
-    return { newPaneName, close, cancel, inputRef, trapRef };
+    return { close, cancel, inputRef, trapRef };
   },
 });
 </script>
