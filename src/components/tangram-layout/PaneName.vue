@@ -2,17 +2,19 @@
   <Transition name="PaneName">
     <div v-if="show" class="modal-mask">
       <div class="modal-wrapper">
-        <div class="modal-container">
+        <div class="modal-container" ref="trapRef">
           <div class="modal-body">New view name:</div>
           <input
             ref="inputRef"
             class="modal-input"
             name="paneName"
-            v-model="newPaneName"
+            :value="paneName"
+            @keyup.enter="close"
+            @keydown.esc="cancel"
           />
           <div class="modal-buttons">
-            <button class="modal-default-button" @click="cancel">Cancel</button>
             <button class="modal-default-button" @click="close">OK</button>
+            <button class="modal-default-button" @click="cancel">Cancel</button>
           </div>
         </div>
       </div>
@@ -21,30 +23,26 @@
 </template>
 
 <script lang="ts">
-import { ref, toRef, defineComponent, computed, watch, onMounted, nextTick } from "vue";
+import { ref, defineComponent } from "vue";
+import useFocusTrap from "./useFocusTrap";
 export default defineComponent({
   props: {
     show: Boolean,
     paneName: String,
   },
   setup(props, context) {
+    const { trapRef } = useFocusTrap();
     let newPaneName = ref("");
     const inputRef = ref(null);
     newPaneName.value = props.paneName;
     console.log("PaneName setup ", props.paneName);
-    // let isShow = ref(props.show);
-    // watch(isShow, (newId) => {
-    //   console.log(newId);
-
-    //   newPaneName.value = props.paneName;
-    // });
     let close = () => {
-      context.emit("close", newPaneName.value);
+      context.emit("close", inputRef.value.value);
     };
     let cancel = () => {
       context.emit("close", null);
     };
-    return { newPaneName, close, cancel };
+    return { newPaneName, close, cancel, inputRef, trapRef };
   },
 });
 </script>
