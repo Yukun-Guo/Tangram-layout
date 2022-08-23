@@ -38,13 +38,13 @@
       <slot />
     </div>
     <Teleport to="body">
-      <PaneName :show="showNameDlg" :paneName="defaultPaneName" @close="onClose" />
+      <PaneName :show="showNameDlg" :paneName="defaultPaneName" @close="close" />
     </Teleport>
   </div>
 </template>
 
 <script lang="ts">
-import { ref, reactive } from "vue";
+import { ref, reactive, nextTick, watchEffect } from "vue";
 import PaneName from "./PaneName.vue";
 
 export default {
@@ -81,15 +81,18 @@ export default {
     };
     let addNode = (itemKey) => {
       let text;
-      showNameDlg.value = true;
       defaultPaneName.value = itemKey;
+      showNameDlg.value = true;
       newNodeKey = itemKey;
-    };
-    let onClose = (newPaneName) => {
-      console.log(newPaneName);
 
+      console.log("addNode ", defaultPaneName.value);
+    };
+    let close = (newPaneName) => {
       // let nodeName = prompt("Please give a name to the new View:", itemKey);
-      if (newPaneName === null) return;
+      if (newPaneName === null || newPaneName === undefined) {
+        showNameDlg.value = false;
+        return;
+      }
       switch (newPaneName.trim()) {
         case "":
           alert("Name can't be empty");
@@ -110,7 +113,7 @@ export default {
       addNode,
       setTitle,
       defaultPaneName,
-      onClose,
+      close,
     };
   },
 };

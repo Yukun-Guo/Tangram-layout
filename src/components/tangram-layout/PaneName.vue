@@ -3,9 +3,17 @@
     <div v-if="show" class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container">
-          <div class="modal-header">New view name:</div>
-          <input name="paneName" v-model="newPaneName" />
-          <button class="modal-default-button" @click="close">OK</button>
+          <div class="modal-body">New view name:</div>
+          <input
+            ref="inputRef"
+            class="modal-input"
+            name="paneName"
+            v-model="newPaneName"
+          />
+          <div class="modal-buttons">
+            <button class="modal-default-button" @click="cancel">Cancel</button>
+            <button class="modal-default-button" @click="close">OK</button>
+          </div>
         </div>
       </div>
     </div>
@@ -13,19 +21,30 @@
 </template>
 
 <script lang="ts">
-import { ref, toRef, defineComponent, computed } from "vue";
+import { ref, toRef, defineComponent, computed, watch, onMounted, nextTick } from "vue";
 export default defineComponent({
   props: {
     show: Boolean,
     paneName: String,
   },
   setup(props, context) {
-    let newPaneName = ref();
+    let newPaneName = ref("");
+    const inputRef = ref(null);
     newPaneName.value = props.paneName;
+    console.log("PaneName setup ", props.paneName);
+    // let isShow = ref(props.show);
+    // watch(isShow, (newId) => {
+    //   console.log(newId);
+
+    //   newPaneName.value = props.paneName;
+    // });
     let close = () => {
       context.emit("close", newPaneName.value);
     };
-    return { newPaneName, close };
+    let cancel = () => {
+      context.emit("close", null);
+    };
+    return { newPaneName, close, cancel };
   },
 });
 </script>
@@ -40,34 +59,38 @@ export default defineComponent({
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   display: table;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.03s ease;
 }
 
 .modal-wrapper {
-  display: table-cell;
+  display: flex;
   vertical-align: middle;
 }
 
 .modal-container {
   width: 300px;
-  margin: 0px auto;
-  padding: 20px 30px;
-  background-color: #fff;
-  border-radius: 2px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+  margin: auto;
+  padding: 10px 20px 10px 20px;
+  background-color: #e1e1e1;
+  border-radius: 5px;
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.33);
   transition: all 0.3s ease;
 }
 
 .modal-header h3 {
-  margin-top: 0;
   color: #42b983;
 }
 
 .modal-body {
-  margin: 20px 0;
+  margin-bottom: 5px;
+}
+.modal-input {
+  margin-right: 3px;
+  width: -webkit-fill-available;
 }
 
 .modal-default-button {
+  margin-bottom: 5px;
   float: right;
 }
 
