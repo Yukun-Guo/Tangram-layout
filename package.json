@@ -1,6 +1,6 @@
 {
   "name": "tangram-layout",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "A Vue3 based UI layout engine. Features draggable and resizable. Custom plugin support and variable themes.",
   "scripts": {
     "dev": "vite",

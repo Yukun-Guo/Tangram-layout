@@ -21,7 +21,7 @@ import {
   createTree,
   insertChild,
 } from "tangram-layout";
-
+import "/node_modules/tangram-layout/dist/style.css";
 //import plugin views
 import HelloWorld from "./components/plugins/HelloWorld/HelloWorld.vue";
 import HelloWorld2 from "./components/plugins/HelloWorld2/HelloWorld2.vue";
