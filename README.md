@@ -131,7 +131,7 @@ theme.value={split: { bgColor: "black" }, // custom theme
             };
 </script>
 <template>
-  <TangramLayout :layout="layout_tree" :pluginComponents="plugins" :theme=theme  />
+  <TangramLayout :layout="layout_tree" :pluginComponents="plugins" :theme="theme"  />
 </template>
 ```
 
@@ -141,7 +141,7 @@ You can control the visible of the header of the pane using `showHeader`.
 
 ``` ts
 <template>
-  <TangramLayout :layout="layout_tree" :pluginComponents="plugins" :showHeader='false'  />
+  <TangramLayout :layout="layout_tree" :pluginComponents="plugins" :showHeader="false"  />
 </template>
 ```
 
@@ -150,6 +150,6 @@ You can control the visible of the header of the pane using `showHeader`.
 You also can hide the controls of the pane using `showControls`.
 ``` ts
 <template>
-  <TangramLayout :layout="layout_tree" :pluginComponents="plugins" :showControls='false'  />
+  <TangramLayout :layout="layout_tree" :pluginComponents="plugins" :showControls="false"  />
 </template>
 ```
