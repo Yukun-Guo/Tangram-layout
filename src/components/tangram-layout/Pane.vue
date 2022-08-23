@@ -84,11 +84,10 @@ export default {
       defaultPaneName.value = itemKey;
       showNameDlg.value = true;
       newNodeKey = itemKey;
-
+      let nodeName = prompt("Please give a name to the new View:", itemKey);
       console.log("addNode ", defaultPaneName.value);
     };
     let close = (newPaneName) => {
-      // let nodeName = prompt("Please give a name to the new View:", itemKey);
       if (newPaneName === null || newPaneName === undefined) {
         showNameDlg.value = false;
         return;

@@ -13,8 +13,8 @@
             @keydown.esc="cancel"
           />
           <div class="modal-buttons">
-            <button class="modal-default-button" @click="close">OK</button>
-            <button class="modal-default-button" @click="cancel">Cancel</button>
+            <button class="modal-ok-button" @click="close">OK</button>
+            <button class="modal-cancel-button" @click="cancel">Cancel</button>
           </div>
         </div>
       </div>
@@ -69,8 +69,8 @@ export default defineComponent({
   width: 300px;
   margin: auto;
   padding: 10px 20px 10px 20px;
-  background-color: #e1e1e1;
-  border-radius: 5px;
+  background-color: #fffffc;
+  border-radius: 0px 0px 5px 5px;
   box-shadow: 0 5px 12px rgba(0, 0, 0, 0.33);
   transition: all 0.3s ease;
 }
@@ -84,12 +84,46 @@ export default defineComponent({
 }
 .modal-input {
   margin-right: 3px;
+  padding: 5px;
   width: -webkit-fill-available;
+  border: 2px solid #e1e1e1;
+}
+.modal-input:focus {
+  outline: none !important;
+  border: 2px solid #1a73e8;
+  border-radius: 3px;
 }
 
-.modal-default-button {
-  margin-bottom: 5px;
+.modal-buttons {
+  display: flex;
   float: right;
+}
+.modal-cancel-button {
+  margin-top: 5px;
+  margin-left: 5px;
+  padding: 5px 10px 5px 10px;
+  color: #1a73e8;
+  background: #fffffc;
+  border: 1px solid #e1e1e1;
+  border-radius: 3px;
+}
+
+.modal-ok-button {
+  margin-top: 5px;
+  margin-left: 5px;
+  padding: 5px 15px 5px 15px;
+  color: #fffffc;
+  background: #1a73e8;
+  border: 1px solid #e1e1e1;
+  border-radius: 3px;
+}
+
+.modal-ok-button:hover {
+  background: #1a43ff;
+}
+
+.modal-cancel-button:hover {
+  background: #d1d1d1;
 }
 
 .modal-enter-from {
