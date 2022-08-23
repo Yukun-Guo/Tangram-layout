@@ -85,16 +85,6 @@ export default defineComponent({
       return { split, pane };
     });
 
-    //Dynamically load components
-    // const pluginComponents = shallowRef(new Map<String, any>());
-    // Object.keys(props.plugins).forEach((element) => {
-    //   pluginComponents.value.set(
-    //     element,
-    //     defineAsyncComponent(() => import(`../plugins/${props.plugins[element].dir}`))
-    //   );
-    // });
-    // pluginComponents.value.set("GetStarted", GetStarted);
-
     const previewRef = ref() as Ref<HTMLElement>; //dragging preview
     const dragRef = ref() as Ref<HTMLElement>; //dragging node thumbnail
 
@@ -188,8 +178,8 @@ export default defineComponent({
         return;
       }
       dragRef.value.style.display = "block";
-      dragRef.value.style.top = event.clientY - 10 + "px";
-      dragRef.value.style.left = event.clientX - 25 + "px";
+      dragRef.value.style.top = event.pageY - 10 + "px";
+      dragRef.value.style.left = event.pageX - 25 + "px";
     };
 
     let previewPane = (
@@ -207,30 +197,31 @@ export default defineComponent({
       var gapH = targetRect.height * gap;
 
       previewRef.value.style.position = "absolute";
+
       switch (pIdx) {
         case 0:
-          previewRef.value.style.top = targetRect.top + "px";
-          previewRef.value.style.left = targetRect.left + "px";
+          previewRef.value.style.top = targetRect.top + window.scrollY + "px";
+          previewRef.value.style.left = targetRect.left + window.scrollX + "px";
           previewRef.value.style.width = targetRect.width + "px";
           previewRef.value.style.height = gapH + "px";
 
           break;
         case 1:
-          previewRef.value.style.top = targetRect.bottom - gapH + "px";
-          previewRef.value.style.left = targetRect.left + "px";
+          previewRef.value.style.top = targetRect.bottom - gapH + window.scrollY + "px";
+          previewRef.value.style.left = targetRect.left + window.scrollX + "px";
           previewRef.value.style.width = targetRect.width + "px";
           previewRef.value.style.height = gapH + "px";
 
           break;
         case 2:
-          previewRef.value.style.top = targetRect.top + "px";
-          previewRef.value.style.left = targetRect.left + "px";
+          previewRef.value.style.top = targetRect.top + window.scrollY + "px";
+          previewRef.value.style.left = targetRect.left + window.scrollX + "px";
           previewRef.value.style.width = gapW + "px";
           previewRef.value.style.height = targetRect.height + "px";
           break;
         case 3:
-          previewRef.value.style.top = targetRect.top + "px";
-          previewRef.value.style.left = targetRect.right - gapW + "px";
+          previewRef.value.style.top = targetRect.top + window.scrollY + "px";
+          previewRef.value.style.left = targetRect.right - gapW + window.scrollX + "px";
           previewRef.value.style.width = gapW + "px";
           previewRef.value.style.height = targetRect.height + "px";
           break;
