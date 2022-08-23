@@ -116,7 +116,7 @@ plugins.value.set("Hello3", {
 
 ### Theme
 
-`TangramLayout` has two built-in thems `light` and `dark`(default). You also can custom your theme by pass a theme to `TangramLayout`.
+`TangramLayout` has two built-in themes `light` and `dark`(default). You also can custom your theme by passing a theme to `TangramLayout`.
 
 
 ```ts
@@ -137,7 +137,7 @@ theme.value={split: { bgColor: "black" }, // custom theme
 
 ### showHeader
 
-You can control the visible of the header of the pane using `showHeader`.
+You can hide the header of the pane using `showHeader`.
 
 ``` ts
 <template>
