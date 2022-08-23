@@ -137,7 +137,7 @@ theme.value={split: { bgColor: "black" }, // custom theme
 
 ### showHeader
 
-You can control the visible of the header of the pane using `showHeader`.
+You can hide the header of the pane using `showHeader`.
 
 ``` ts
 <template>
