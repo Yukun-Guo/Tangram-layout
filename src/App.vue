@@ -2,6 +2,7 @@
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import { ref, shallowRef, defineAsyncComponent } from "vue";
+import { PaneName } from "./components/tangram-layout/PaneName.vue";
 import {
   TangramLayout,
   createTree,
@@ -120,7 +121,6 @@ let plugins = importPluginComponents("./components/plugins", pluginConfigs);
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  /* margin-top: 20px; */
   height: 100%;
   user-select: none; /* standard syntax */
   -webkit-user-select: none; /* webkit (safari, chrome) browsers */

@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, h, VNode, computed, onMounted } from "vue";
+import { defineComponent, ref, reactive, h, VNode, computed } from "vue";
 export default defineComponent({
   props: {
     leftChildId: { type: String, default: null },

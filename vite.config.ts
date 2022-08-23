@@ -7,7 +7,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, 'src/components/tangram-layout/index.ts'),
-      name: 'MyLib',
+      name: 'tangram-layout',
       fileName: (format) => `tangram-layout.${format}.js`,
     },
     rollupOptions: {

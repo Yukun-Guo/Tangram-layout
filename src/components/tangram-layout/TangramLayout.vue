@@ -34,7 +34,7 @@ export default defineComponent({
       default: {},
     },
     theme: {
-      type: Object,
+      type: [Object, String],
       default: "dark",
     },
     showHeader: {

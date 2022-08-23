@@ -37,11 +37,16 @@
     >
       <slot />
     </div>
+    <Teleport to="body">
+      <PaneName :show="showNameDlg" :paneName="defaultPaneName" @close="onClose" />
+    </Teleport>
   </div>
 </template>
 
 <script lang="ts">
 import { ref, reactive } from "vue";
+import PaneName from "./PaneName.vue";
+
 export default {
   props: {
     title: { type: String, default: "" },
@@ -58,8 +63,12 @@ export default {
     showControls: { type: Boolean, default: true },
     showHeader: { type: Boolean, default: true },
   },
+  components: { PaneName },
   setup(props, context) {
     let showDropDown = ref(1);
+    let showNameDlg = ref(false);
+    let defaultPaneName = ref("");
+    let newNodeKey;
     // console.log("props.plugins", props.plugins.get("Hello"));
 
     let setTitle = (item) => {
@@ -70,23 +79,39 @@ export default {
     let removeNode = () => {
       context.emit("removeNode", props.nodeId);
     };
-    let addNode = (nodeID) => {
+    let addNode = (itemKey) => {
       let text;
-      let nodeName = prompt("Please give a name to the new View:", nodeID);
-      if (nodeName === null) return;
-      switch (nodeName.trim()) {
+      showNameDlg.value = true;
+      defaultPaneName.value = itemKey;
+      newNodeKey = itemKey;
+    };
+    let onClose = (newPaneName) => {
+      console.log(newPaneName);
+
+      // let nodeName = prompt("Please give a name to the new View:", itemKey);
+      if (newPaneName === null) return;
+      switch (newPaneName.trim()) {
         case "":
           alert("Name can't be empty");
           break;
         default:
           context.emit("addNode", {
-            name: nodeName.trim(),
+            name: newPaneName.trim(),
             twinID: props.nodeId,
-            vNode: nodeID,
+            vNode: newNodeKey,
           });
+          showNameDlg.value = false;
       }
     };
-    return { showDropDown, removeNode, addNode, setTitle };
+    return {
+      showDropDown,
+      showNameDlg,
+      removeNode,
+      addNode,
+      setTitle,
+      defaultPaneName,
+      onClose,
+    };
   },
 };
 </script>
