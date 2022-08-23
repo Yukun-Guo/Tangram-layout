@@ -116,7 +116,7 @@ plugins.value.set("Hello3", {
 
 ### Theme
 
-`TangramLayout` has two built-in themes `light` and `dark`(default). You also can custom your theme by pass a theme to `TangramLayout`.
+`TangramLayout` has two built-in themes `light` and `dark`(default). You also can custom your theme by passing a theme to `TangramLayout`.
 
 
 ```ts
