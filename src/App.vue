@@ -104,22 +104,22 @@ let changeTheme = () => {
 // let plugins = importPluginComponents("./components/plugins", pluginConfigs);
 
 // register plugins
-let plugins = shallowRef(new Map<String, PluginObject>());
-plugins.value.set("Hello", {
+let plugins = new Map<String, PluginObject>();
+plugins.set("Hello", {
   name: "Hello",
   component: HelloWorld,
   description: "...",
   version: "xxx",
   author: "...",
 });
-plugins.value.set("Hello2", {
+plugins.set("Hello2", {
   name: "Hello2",
   component: HelloWorld2,
   description: "...",
   version: "xxx",
   author: "...",
 });
-plugins.value.set("Hello3", {
+plugins.set("Hello3", {
   name: "Hello3",
   // async import component
   component: HelloWorld3,
@@ -133,13 +133,7 @@ plugins.value.set("Hello3", {
   <button @click="showHeader = !showHeader">showHeader ({{ showHeader }})</button>
   <button @click="showControls = !showControls">showControls ({{ showControls }})</button>
   <button @click="changeTheme">Change Theme ({{ themeID }})</button>
-  <TangramLayout
-    :layout="layout_tree"
-    :pluginComponents="plugins"
-    :theme="theme"
-    :showHeader="showHeader"
-    :showControls="showControls"
-  />
+  <TangramLayout />
 </template>
 
 <style>

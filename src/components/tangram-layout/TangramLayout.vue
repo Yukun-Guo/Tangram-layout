@@ -7,6 +7,7 @@ import {
   h,
   VNode,
   shallowRef,
+  markRaw,
   computed,
   Ref,
 } from "vue";
@@ -36,7 +37,7 @@ export default defineComponent({
           "GetStarted",
           {
             name: "GetStarted",
-            component: GetStarted,
+            component: markRaw(GetStarted),
             description: "GetStarted page",
             version: "0.0.1",
             author: "tangram-layout",
@@ -65,6 +66,7 @@ export default defineComponent({
       layout: "horizontal",
       relativePosition: 1,
     });
+    let pluginComponents = markRaw(props.pluginComponents);
     let themeColor = computed(() => {
       let split: { bgColor: any } = { bgColor: "white" };
       let pane: { headerBgColor: any; bodyBgColor: any; color: any } = {
@@ -394,7 +396,7 @@ export default defineComponent({
                   onAddNode,
                   title: Node.name,
                   nodeId: Node.ID,
-                  plugins: props.pluginComponents,
+                  plugins: pluginComponents,
                   theme: themeColor.value.pane,
                   showHeader: props.showHeader,
                   showControls: props.showControls,
@@ -402,7 +404,7 @@ export default defineComponent({
                 () =>
                   h(
                     typeof Node.vNode === "string"
-                      ? props.pluginComponents.get(Node.vNode).component
+                      ? pluginComponents.get(Node.vNode).component
                       : Node.vNode,
                     {},
                     () => []
