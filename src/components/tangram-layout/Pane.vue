@@ -51,7 +51,7 @@ export default {
   props: {
     title: { type: String, default: "" },
     nodeId: { type: String, default: "" },
-    plugins: { type: Object, default: { Welcome: "" } },
+    plugins: { type: Object, default: {} },
     theme: {
       type: Object,
       default: {

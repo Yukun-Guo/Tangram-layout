@@ -31,7 +31,18 @@ export default defineComponent({
     },
     pluginComponents: {
       type: Object,
-      default: {},
+      default: new Map([
+        [
+          "GetStarted",
+          {
+            name: "GetStarted",
+            component: GetStarted,
+            description: "GetStarted page",
+            version: "0.0.1",
+            author: "tangram-layout",
+          },
+        ],
+      ]),
     },
     theme: {
       type: [Object, String],
@@ -451,13 +462,16 @@ export default defineComponent({
   width: 120px;
   margin-top: 20%;
   margin-inline: auto;
-  color: gray;
+  color: #212121;
+  padding: 3px;
+  border-radius: 3px;
+  background: #e1e1e1;
 }
 .emptyLayout:hover {
   margin-top: 20%;
-  background: yellow;
+  background: #60a5fa;
   box-sizing: content-box;
-  color: blue;
+  color: white;
 }
 
 .leaf {
