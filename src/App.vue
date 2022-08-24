@@ -133,7 +133,13 @@ plugins.set("Hello3", {
   <button @click="showHeader = !showHeader">showHeader ({{ showHeader }})</button>
   <button @click="showControls = !showControls">showControls ({{ showControls }})</button>
   <button @click="changeTheme">Change Theme ({{ themeID }})</button>
-  <TangramLayout />
+  <TangramLayout
+    :layout="layout_tree"
+    :pluginComponents="plugins"
+    :theme="theme"
+    :showHeader="showHeader"
+    :showControls="showControls"
+  />
 </template>
 
 <style>
