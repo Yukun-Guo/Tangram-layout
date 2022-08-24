@@ -38,7 +38,7 @@ let node1: TreeNode = {
   ID: "1",
   name: "Pane 1", // title of the pane
   layout: "horizontal", // layout of the pane (horizontal or vertical)
-  relativePosition: 1, // relative position of the pane (1: left/top, 2: right/bottom)
+  relativePosition: 1, // relative position of the pane (0: left/top, 1: right/bottom)
   twinID: undefined, // twinID of the pane (if the pane is split, it will have a twin)
   minSize: 0, //pixels
   vNode: "Hello", // name of the component to show in the pane
