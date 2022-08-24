@@ -79,22 +79,22 @@ insertChild(layout_tree, node4);
 3. Create a plugin Configuration map.
 
 ```ts
-let plugins = shallowRef(new Map<String, PluginObject>());
-plugins.value.set("Hello", {
+let plugins = new Map<String, PluginObject>();
+plugins.set("Hello", {
   name: "Hello",
   component: HelloWorld,
   description: "...",
   version: "xxx",
   author: "...",
 });
-plugins.value.set("Hello2", {
+plugins.set("Hello2", {
   name: "Hello2",
   component: HelloWorld2,
   description: "...",
   version: "xxx",
   author: "...",
 });
-plugins.value.set("Hello3", {
+plugins.set("Hello3", {
   name: "Hello3",
   // async import component
   component: HelloWorld3,
