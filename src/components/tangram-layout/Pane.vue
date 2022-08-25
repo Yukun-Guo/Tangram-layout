@@ -131,9 +131,9 @@ export default {
 .pane > .header {
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 15px;
-  height: 18px;
-  padding: 3px;
+  /* font-size: 15px; */
+  height: 1.2em;
+  padding: 0.3em;
   overflow: hidden;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -167,8 +167,8 @@ export default {
   border-radius: 3px;
   border-width: 0px;
   border-color: grey;
-  font-size: 14px;
-  padding: 0px 2px 0px 2px;
+  /* font-size: 14px; */
+  padding: 0em 0.2em 0em 0.2em;
 
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -184,7 +184,7 @@ export default {
 .pane > .header > .controller > .dropdown > .dropdown-content {
   display: none;
   position: absolute;
-  padding: 4px;
+  padding: 0.2em;
   text-align: left;
 
   min-width: 80px;
@@ -193,7 +193,7 @@ export default {
 }
 
 .dropdown-item {
-  padding: 2px;
+  padding: 0.2em;
 }
 
 .pane > .header > .controller > .dropdown:hover .dropdown-content {
@@ -224,7 +224,7 @@ export default {
 
 /* Divs inside the dropdown */
 .dropdown-content div {
-  padding: 2px 2px;
+  padding: 0.2em;
   text-decoration: none;
   display: block;
 }

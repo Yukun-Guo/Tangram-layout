@@ -150,6 +150,7 @@ plugins.set("Hello3", {
   text-align: center;
   color: #2c3e50;
   height: 100%;
+
   user-select: none; /* standard syntax */
   -webkit-user-select: none; /* webkit (safari, chrome) browsers */
   -moz-user-select: none; /* mozilla browsers */
